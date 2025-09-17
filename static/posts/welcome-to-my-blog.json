@@ -1,0 +1,11 @@
+{
+  "slug": "welcome-to-my-blog",
+  "title": "Welcome to My Blog!",
+  "author": "Niaz Bin Siraj",
+  "date": "2025-09-01",
+  "category": "Personal",
+  "tags": "welcome,introduction,blog,personal",
+  "coverPhoto": "static/images/blog-cover.jpg",
+  "photos": [],
+  "contents": "<p>Hello and welcome to my personal blog! I'm <strong>Niaz Bin Siraj</strong>, a passionate Software Engineer, and I'm excited to share this journey with you.</p><h2>What You Can Expect</h2><p>This blog is where I'll be sharing my thoughts, experiences, and knowledge about:</p><ul><li><strong>Web Development</strong> - Tips, tutorials, and best practices</li><li><strong>JavaScript</strong> - Deep dives into modern JS concepts</li><li><strong>Career Growth</strong> - Lessons learned in software engineering</li><li><strong>Technology Trends</strong> - My take on the latest in tech</li><li><strong>Personal Projects</strong> - Behind the scenes of my coding adventures</li></ul><h2>Why I Started This Blog</h2><p>As developers, we're constantly learning and evolving. I believe that <em>sharing knowledge</em> not only helps others but also reinforces our own understanding. This blog serves as both a platform to give back to the community and a personal journal of my growth as a software engineer.</p><h2>Let's Connect</h2><p>I encourage you to engage with the content! Feel free to reach out with questions, suggestions, or just to say hello. You can find me on various platforms, and I'm always open to connecting with fellow developers and tech enthusiasts.</p><p>Thank you for stopping by, and I hope you find the content here valuable and inspiring. Let's learn and grow together!</p><p><strong>Happy coding!</strong><br>Niaz</p>"
+}
