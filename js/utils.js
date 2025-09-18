@@ -58,7 +58,7 @@ function sanitizeHTML(html) {
 function replacePhotoPlaceholders(content, photos) {
     let processedContent = content;
     photos.forEach((photo, index) => {
-        const placeholder = `{{photo${index + 1}}}`;
+        const placeholder = `{{image${index + 1}}}`;
         const imgTag = `<img src="${photo}" alt="Blog image ${index + 1}" class="w-full h-auto rounded-lg shadow-md my-4" loading="lazy">`;
         processedContent = processedContent.replace(new RegExp(placeholder, 'g'), imgTag);
     });
