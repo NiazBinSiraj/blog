@@ -422,24 +422,62 @@ class PostManager {
         }
         metaDescription.content = post.excerpt;
 
+        // Clear previous article tags
+        this.clearPreviousArticleTags();
+
         // Update Open Graph tags
         this.updateOpenGraphTags(post);
+    }
+
+    clearPreviousArticleTags() {
+        // Remove existing article tags to avoid accumulation
+        const existingArticleTags = document.querySelectorAll('meta[property^="article:"]');
+        existingArticleTags.forEach(tag => tag.remove());
     }
 
     updateOpenGraphTags(post) {
         const baseURL = window.location.origin + getBaseURL();
         const postURL = `${baseURL}#/post/${post.slug}`;
-        const imageURL = post.coverPhoto ? `${baseURL}${post.coverPhoto}` : `${baseURL}static/images/profile.jpg`;
+        // Always use the post's cover photo if available, no fallback to profile.jpg
+        const imageURL = post.coverPhoto ? `${baseURL}${post.coverPhoto}` : null;
 
         const ogTags = {
             'og:title': post.title,
             'og:description': post.excerpt,
             'og:url': postURL,
-            'og:image': imageURL,
+            'og:type': 'article',
+            'og:site_name': 'Niaz Bin Siraj - Blog',
             'twitter:title': post.title,
             'twitter:description': post.excerpt,
-            'twitter:image': imageURL
+            'twitter:card': 'summary_large_image',
+            'twitter:site': '@niazbinsiraj'
         };
+
+        // Only set image if coverPhoto exists
+        if (imageURL) {
+            ogTags['og:image'] = imageURL;
+            ogTags['og:image:alt'] = post.title;
+            ogTags['og:image:width'] = '1200';
+            ogTags['og:image:height'] = '630';
+            ogTags['twitter:image'] = imageURL;
+            ogTags['twitter:image:alt'] = post.title;
+        }
+
+        // Add article-specific tags
+        ogTags['article:author'] = post.author;
+        ogTags['article:published_time'] = new Date(post.date).toISOString();
+        if (post.category) {
+            ogTags['article:section'] = post.category;
+        }
+        if (post.tagArray && post.tagArray.length > 0) {
+            // Add first few tags
+            post.tagArray.slice(0, 5).forEach(tag => {
+                const tagMeta = document.createElement('meta');
+                tagMeta.setAttribute('property', 'article:tag');
+                tagMeta.content = tag;
+                document.head.appendChild(tagMeta);
+            });
+        }
 
         Object.entries(ogTags).forEach(([property, content]) => {
             let metaTag = document.querySelector(`meta[property="${property}"]`);
@@ -450,6 +488,17 @@ class PostManager {
             }
             metaTag.content = content;
         });
+
+        // Force social media platforms to refresh by adding timestamp
+        const canonicalUrl = document.querySelector('link[rel="canonical"]');
+        if (canonicalUrl) {
+            canonicalUrl.href = postURL;
+        } else {
+            const canonical = document.createElement('link');
+            canonical.rel = 'canonical';
+            canonical.href = postURL;
+            document.head.appendChild(canonical);
+        }
     }
 
     getAllCategories() {

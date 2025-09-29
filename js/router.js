@@ -213,9 +213,54 @@ class Router {
         }
     }
 
+    resetToDefaultMetaTags() {
+        // Reset to default meta tags when not viewing a specific post
+        document.title = 'Niaz Bin Siraj - Personal Blog';
+        
+        const metaDescription = document.querySelector('meta[name="description"]');
+        if (metaDescription) {
+            metaDescription.content = 'Personal blog by Niaz Bin Siraj - Software Engineer. Sharing insights on web development, technology, and more.';
+        }
+
+        // Reset Open Graph tags to defaults
+        const defaultTags = {
+            'og:title': 'Niaz Bin Siraj - Personal Blog',
+            'og:description': 'Personal blog by Niaz Bin Siraj - Software Engineer. Sharing insights on web development, technology, and more.',
+            'og:url': 'https://niazbinsiraj.github.io/blog/',
+            'og:type': 'website',
+            'og:image': 'https://niazbinsiraj.github.io/blog/static/images/profile.jpg',
+            'og:image:alt': 'Niaz Bin Siraj - Software Engineer',
+            'twitter:title': 'Niaz Bin Siraj - Personal Blog',
+            'twitter:description': 'Personal blog by Niaz Bin Siraj - Software Engineer. Sharing insights on web development, technology, and more.',
+            'twitter:image': 'https://niazbinsiraj.github.io/blog/static/images/profile.jpg',
+            'twitter:image:alt': 'Niaz Bin Siraj - Software Engineer',
+            'twitter:card': 'summary_large_image'
+        };
+
+        Object.entries(defaultTags).forEach(([property, content]) => {
+            const metaTag = document.querySelector(`meta[property="${property}"]`);
+            if (metaTag) {
+                metaTag.content = content;
+            }
+        });
+
+        // Clear article-specific tags
+        const articleTags = document.querySelectorAll('meta[property^="article:"]');
+        articleTags.forEach(tag => tag.remove());
+
+        // Reset canonical URL
+        const canonical = document.querySelector('link[rel="canonical"]');
+        if (canonical) {
+            canonical.href = 'https://niazbinsiraj.github.io/blog/';
+        }
+    }
+
     // Route handlers
     async renderHome() {
         showLoading();
+        
+        // Reset meta tags to default
+        this.resetToDefaultMetaTags();
         
         try {
             await postManager.loadAllPosts();
@@ -362,6 +407,9 @@ class Router {
     async renderAllPosts() {
         showLoading();
         
+        // Reset meta tags to default
+        this.resetToDefaultMetaTags();
+        
         try {
             await postManager.loadAllPosts();
             const posts = postManager.posts.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -439,6 +487,9 @@ class Router {
                 this.render404();
                 return;
             }
+
+            console.log('Updating meta tags for post...');
+            postManager.updateMetaTags(post);
 
             console.log('Rendering full post...');
             const content = postManager.renderFullPost(post);
