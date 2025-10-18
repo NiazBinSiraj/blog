@@ -690,7 +690,7 @@ class Router {
                             Technical Expertise
                         </h3>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            ${['JavaScript', 'React', 'Node.js', 'Python', 'TypeScript', 'Vue.js', 'Docker', 'AWS'].map(skill => `
+                            ${['Java', 'Spring', 'Hibernate', 'SQL', 'React', 'Kafka', 'Docker', 'AWS'].map(skill => `
                                 <div class="text-center p-4 bg-white/60 dark:bg-tech-800/60 backdrop-blur-sm border border-tech-200/50 dark:border-tech-700/50 rounded-xl hover:scale-105 transition-all duration-300">
                                     <div class="font-medium text-tech-700 dark:text-tech-300">${skill}</div>
                                 </div>
@@ -707,13 +707,13 @@ class Router {
                             I'm always interested in discussing new opportunities, innovative projects, or just having a chat about technology.
                         </p>
                         <div class="flex flex-wrap justify-center gap-4">
-                            <a href="mailto:niaz@example.com" class="modern-btn px-6 py-3 bg-gradient-to-r from-accent-600 to-blue-600 hover:from-accent-700 hover:to-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                            <a href="mailto:niazbinsiraj@gmail.com" class="modern-btn px-6 py-3 bg-gradient-to-r from-accent-600 to-blue-600 hover:from-accent-700 hover:to-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
                                 📧 Email Me
                             </a>
                             <a href="https://linkedin.com/in/niazbinsiraj" target="_blank" class="modern-btn px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
                                 💼 LinkedIn
                             </a>
-                            <a href="https://github.com/niazbinsiraj" target="_blank" class="modern-btn px-6 py-3 bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-900 hover:to-black text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                            <a href="https://github.com/NiazBinSiraj" target="_blank" class="modern-btn px-6 py-3 bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-900 hover:to-black text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
                                 🐙 GitHub
                             </a>
                         </div>
