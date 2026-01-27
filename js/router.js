@@ -11,20 +11,16 @@ class Router {
     }
 
     init() {
-        console.log('Router initialization started');
-        
         // Define routes
         this.defineRoutes();
         
         // Listen for hash changes
         window.addEventListener('hashchange', () => {
-            console.log('Hash change detected');
             this.handleRouteChange();
         });
         
         // Listen for popstate (back/forward buttons)
         window.addEventListener('popstate', (e) => {
-            console.log('Popstate detected', e.state);
             if (e.state && e.state.path) {
                 this.handleRouteChange(e.state.path);
             }
@@ -40,8 +36,6 @@ class Router {
             this.setupNavigationListeners();
             this.handleRouteChange();
         }
-        
-        console.log('Router initialization completed');
     }
 
     defineRoutes() {
@@ -60,18 +54,11 @@ class Router {
     setupNavigationListeners() {
         // Sidebar navigation with improved event handling
         document.addEventListener('click', (e) => {
-            console.log('Click detected on:', e.target, 'Closest elements:', {
-                route: e.target.closest('[data-route]'),
-                postCard: e.target.closest('.post-card'),
-                tag: e.target.closest('.tag')
-            });
-            
             // Check if the clicked element or its parent has data-route attribute
             const routeElement = e.target.closest('[data-route]');
             if (routeElement) {
                 e.preventDefault();
                 const route = routeElement.getAttribute('data-route');
-                console.log('Navigating to route:', route);
                 this.navigate(route);
                 return;
             }
@@ -81,9 +68,7 @@ class Router {
             if (postCard) {
                 e.preventDefault();
                 const slug = postCard.getAttribute('data-slug');
-                console.log('Post card clicked, slug:', slug);
                 if (slug) {
-                    console.log('Navigating to post:', slug);
                     this.navigate('post', { slug });
                 } else {
                     console.error('No slug found on post card');
@@ -97,7 +82,6 @@ class Router {
                 e.preventDefault();
                 const tag = tagElement.getAttribute('data-tag');
                 if (tag && window.searchManager) {
-                    console.log('Searching by tag:', tag);
                     searchManager.searchByTag(tag);
                 }
                 return;
@@ -139,8 +123,8 @@ class Router {
         if (params.tag) {
             url += `?tag=${encodeURIComponent(params.tag)}`;
         }
-        if (params.q) {
-            url += `?q=${encodeURIComponent(params.q)}`;
+        if (params.query) {
+            url += `?query=${encodeURIComponent(params.query)}`;
         }
         
         window.location.hash = url;
@@ -156,8 +140,6 @@ class Router {
     }
 
     updateActiveNavigation(route) {
-        console.log('Updating active navigation for route:', route);
-        
         // Remove active class from all nav links
         document.querySelectorAll('.nav-link').forEach(link => {
             link.classList.remove('active');
@@ -166,34 +148,40 @@ class Router {
         // Add active class to current route
         const activeLink = document.querySelector(`[data-route="${route}"]`);
         if (activeLink) {
-            console.log('Found active link for route:', route);
             activeLink.classList.add('active');
-        } else {
-            console.log('No active link found for route:', route);
         }
     }
 
     handleRouteChange(path = null) {
         const hash = path || window.location.hash.slice(1);
-        console.log('Route change triggered:', { hash, path });
         
-        const [route, ...pathParts] = hash.split('/');
-        const params = new URLSearchParams(window.location.hash.split('?')[1] || '');
+        // Split by ? first to separate route from query params
+        const [routePath, queryString] = hash.split('?');
+        
+        // Split the route path by / and filter out empty strings
+        const pathParts = routePath.split('/').filter(part => part);
+        
+        // First part is the route, rest are path parameters (like slug)
+        const route = pathParts[0] || 'home';
+        const slug = pathParts[1] || null;
+        
+        // Parse query parameters
+        const params = new URLSearchParams(queryString || '');
         
         let routeParams = {};
         
-        // Extract parameters
-        if (pathParts.length > 0) {
-            routeParams.slug = pathParts[0];
+        // Add slug if present
+        if (slug) {
+            routeParams.slug = slug;
         }
         
+        // Add query parameters
         params.forEach((value, key) => {
             routeParams[key] = decodeURIComponent(value);
         });
         
         // Default to home if no route
         const targetRoute = route || 'home';
-        console.log('Target route:', targetRoute, 'Params:', routeParams);
         
         // Execute route handler
         if (this.routes[targetRoute]) {
@@ -208,7 +196,6 @@ class Router {
                 this.render404();
             }
         } else {
-            console.log('Route not found:', targetRoute);
             this.routes['404']();
         }
     }
@@ -464,8 +451,6 @@ class Router {
     }
 
     async renderPost(params) {
-        console.log('renderPost called with params:', params);
-        
         if (!params.slug) {
             console.error('No slug provided for post');
             this.render404();
@@ -475,12 +460,9 @@ class Router {
         showLoading();
         
         try {
-            console.log('Loading all posts...');
             await postManager.loadAllPosts();
-            console.log('Posts loaded, searching for slug:', params.slug);
             
             const post = postManager.getPostBySlug(params.slug);
-            console.log('Found post:', post);
             
             if (!post) {
                 console.error('Post not found for slug:', params.slug);
@@ -488,15 +470,11 @@ class Router {
                 return;
             }
 
-            console.log('Updating meta tags for post...');
             postManager.updateMetaTags(post);
 
-            console.log('Rendering full post...');
             const content = postManager.renderFullPost(post);
-            console.log('Generated content length:', content.length);
             
             document.getElementById('main-content').innerHTML = content;
-            console.log('Post content inserted into DOM');
             
         } catch (error) {
             console.error('Error loading post:', error);
@@ -640,7 +618,7 @@ class Router {
     }
 
     renderSearch(params) {
-        const searchTerm = params.q || '';
+        const searchTerm = params.query || '';
         const category = params.category || '';
         const tag = params.tag || '';
         
@@ -664,9 +642,6 @@ class Router {
                         <div class="flex flex-col md:flex-row items-center gap-8">
                             <div class="relative">
                                 <img src="static/images/profile.jpg" alt="Niaz Bin Siraj" class="w-48 h-48 rounded-2xl object-cover ring-4 ring-accent-500/30 shadow-xl">
-                                <div class="absolute -bottom-4 -right-4 w-16 h-16 bg-gradient-to-br from-accent-500 to-blue-500 rounded-2xl flex items-center justify-center text-white shadow-lg">
-                                    <span class="text-2xl">👨‍💻</span>
-                                </div>
                             </div>
                             <div class="flex-1 text-center md:text-left space-y-4">
                                 <h2 class="text-3xl md:text-4xl font-bold font-space text-tech-800 dark:text-tech-100">
