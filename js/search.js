@@ -82,12 +82,10 @@ class SearchManager {
         const results = this.searchResults;
         
         let content = `
-            <div class="search-results fade-in">
-                <div class="mb-8">
-                    <h1 class="text-2xl md:text-3xl font-bold font-merriweather mb-4">
-                        Search Results
-                    </h1>
-                    <p class="text-gray-600 dark:text-gray-400">
+            <div class="search-results">
+                <div class="search-header">
+                    <h1>Search Results</h1>
+                    <p class="search-count">
                         ${results.length} result${results.length !== 1 ? 's' : ''} found for "${escapeHTML(query)}"
                     </p>
                 </div>
@@ -101,36 +99,36 @@ class SearchManager {
 
         content += '</div>';
         
-        document.getElementById('content').innerHTML = content;
+        document.getElementById('main-content').innerHTML = content;
         this.setupSearchResultsListeners();
     }
 
     renderNoResults(query) {
         return `
-            <div class="text-center py-12">
-                <svg class="mx-auto h-24 w-24 text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            <div class="search-no-results">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No posts found</h3>
-                <p class="text-gray-500 dark:text-gray-400 mb-6">
+                <h3>No posts found</h3>
+                <p>
                     No posts match your search for "${escapeHTML(query)}". Try different keywords or browse all posts.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                    <button onclick="router.navigate('posts')" class="px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-lg transition-colors">
+                <div class="search-actions">
+                    <button onclick="router.navigate('posts')" class="btn-primary">
                         Browse All Posts
                     </button>
-                    <button onclick="document.getElementById('searchInput').value = ''; router.navigate('home')" class="px-6 py-3 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
+                    <button onclick="document.getElementById('searchInput').value = ''; router.navigate('home')" class="btn-secondary">
                         Clear Search
                     </button>
                 </div>
                 
-                <div class="mt-8 text-left">
-                    <h4 class="font-semibold text-gray-900 dark:text-gray-100 mb-3">Search tips:</h4>
-                    <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                        <li>• Try using different keywords</li>
-                        <li>• Check your spelling</li>
-                        <li>• Use more general terms</li>
-                        <li>• Browse posts by category or tag</li>
+                <div class="search-tips">
+                    <h4>Search tips:</h4>
+                    <ul>
+                        <li>Try using different keywords</li>
+                        <li>Check your spelling</li>
+                        <li>Use more general terms</li>
+                        <li>Browse posts by category or tag</li>
                     </ul>
                 </div>
             </div>
@@ -138,7 +136,7 @@ class SearchManager {
     }
 
     renderResultsList(results, query) {
-        let content = '<div class="space-y-6">';
+        let content = '<div class="search-results-list">';
         
         results.forEach(post => {
             content += this.renderSearchResult(post, query);
@@ -153,41 +151,33 @@ class SearchManager {
         const highlightedExcerpt = highlightSearchTerms(post.excerpt, query);
         
         const coverImage = post.coverPhoto ? 
-            `<img src="${post.coverPhoto}" alt="${post.title}" class="w-20 h-20 object-cover rounded-lg" loading="lazy">` :
-            `<div class="w-20 h-20 bg-gradient-to-br from-teal-400 to-blue-500 rounded-lg flex items-center justify-center">
-                <span class="text-white text-lg font-bold">${post.title.charAt(0)}</span>
+            `<img src="${post.coverPhoto}" alt="${post.title}" loading="lazy">` :
+            `<div class="search-result-placeholder">
+                <span>${post.title.charAt(0)}</span>
             </div>`;
 
-        const tags = post.tagArray ? post.tagArray
-            .filter(tag => tag.toLowerCase().includes(query.toLowerCase()))
-            .map(tag => `<span class="tag">${highlightSearchTerms(tag, query)}</span>`)
-            .join('') : '';
-
         return `
-            <article class="search-result bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer" data-slug="${post.slug}">
-                <div class="flex gap-4">
+            <article class="search-result-item" data-slug="${post.slug}">
+                <div class="search-result-image">
                     ${coverImage}
-                    <div class="flex-1 min-w-0">
-                        <div class="flex items-center gap-3 mb-2">
-                            <span class="reading-time">${post.readingTime} min read</span>
-                            <span class="text-sm text-gray-500 dark:text-gray-400">${post.formattedDate}</span>
-                        </div>
-                        
-                        <h3 class="text-lg font-bold font-merriweather mb-2 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
-                            ${highlightedTitle}
-                        </h3>
-                        
-                        <p class="text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
-                            ${highlightedExcerpt}
-                        </p>
-                        
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                ${post.category ? `<span class="text-sm text-teal-600 dark:text-teal-400">📂 ${post.category}</span>` : ''}
-                                ${tags ? `<div class="flex flex-wrap gap-1">${tags}</div>` : ''}
-                            </div>
-                            <span class="text-sm text-gray-500 dark:text-gray-400">By ${post.author}</span>
-                        </div>
+                </div>
+                <div class="search-result-content">
+                    <div class="search-result-meta">
+                        <time>${post.formattedDate}</time>
+                        ${post.category ? `<span class="search-result-category">${post.category}</span>` : ''}
+                    </div>
+                    
+                    <h3 class="search-result-title">
+                        ${highlightedTitle}
+                    </h3>
+                    
+                    <p class="search-result-excerpt">
+                        ${highlightedExcerpt}
+                    </p>
+                    
+                    <div class="search-result-footer">
+                        <span class="search-result-author">By ${post.author}</span>
+                        <span class="search-result-arrow">→</span>
                     </div>
                 </div>
             </article>
@@ -196,7 +186,7 @@ class SearchManager {
 
     setupSearchResultsListeners() {
         // Click handlers for search results
-        document.querySelectorAll('.search-result').forEach(result => {
+        document.querySelectorAll('.search-result-item').forEach(result => {
             result.addEventListener('click', () => {
                 const slug = result.getAttribute('data-slug');
                 router.navigate('post', { slug });
@@ -283,6 +273,36 @@ class SearchManager {
             this.searchInput.value = query;
         }
         this.currentQuery = query;
+    }
+
+    // Perform search and render results (called by router)
+    async performSearch(searchTerm, options = {}) {
+        try {
+            await postManager.loadAllPosts();
+            
+            if (searchTerm) {
+                // Regular search by query
+                this.currentQuery = searchTerm;
+                this.searchResults = postManager.searchPosts(searchTerm);
+                this.setSearchQuery(searchTerm);
+            } else if (options.category) {
+                // Search by category
+                this.currentQuery = options.category;
+                this.searchResults = postManager.getPostsByCategory(options.category);
+                this.setSearchQuery(options.category);
+            } else if (options.tag) {
+                // Search by tag
+                this.currentQuery = options.tag;
+                this.searchResults = postManager.getPostsByTag(options.tag);
+                this.setSearchQuery(options.tag);
+            }
+            
+            // Render the results
+            this.renderSearchResults();
+        } catch (error) {
+            console.error('Error performing search:', error);
+            showError('An error occurred while searching. Please try again.');
+        }
     }
 }
 

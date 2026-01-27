@@ -16,8 +16,6 @@ class ThemeManager {
         const savedTheme = storage.get(this.themeKey);
         const defaultTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
         
-        console.log('Theme initialization:', { savedTheme, systemPrefersDark, defaultTheme });
-        
         this.setTheme(defaultTheme);
         
         // Setup theme toggle button
@@ -32,8 +30,6 @@ class ThemeManager {
         const themeIcon = document.getElementById('themeIcon');
         const themeText = document.getElementById('themeText');
 
-        console.log('Setting theme to:', theme);
-
         if (theme === 'dark') {
             html.classList.add('dark');
             html.setAttribute('data-theme', 'dark');
@@ -45,10 +41,6 @@ class ThemeManager {
             if (themeIcon) themeIcon.textContent = '🌙';
             if (themeText) themeText.textContent = 'Dark Mode';
         }
-
-        // Verify the class was applied
-        console.log('HTML classes after theme change:', html.className);
-        console.log('Dark mode active:', html.classList.contains('dark'));
 
         // Save theme preference
         storage.set(this.themeKey, theme);
@@ -131,8 +123,6 @@ let themeManager;
     const savedTheme = localStorage.getItem('blog-theme');
     const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     const initialTheme = savedTheme ? JSON.parse(savedTheme) : (systemPrefersDark ? 'dark' : 'light');
-    
-    console.log('Early theme initialization:', { savedTheme, systemPrefersDark, initialTheme });
     
     if (initialTheme === 'dark') {
         document.documentElement.classList.add('dark');

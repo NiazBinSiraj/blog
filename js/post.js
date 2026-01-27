@@ -166,66 +166,42 @@ class PostManager {
     renderPostCard(post) {
         const baseURL = getBaseURL();
         const coverImage = post.coverPhoto ? 
-            `<div class="relative overflow-hidden rounded-t-2xl">
-                <img src="${post.coverPhoto}" alt="${post.title}" class="w-full h-48 object-cover transition-transform duration-700 hover:scale-110" loading="lazy">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+            `<div class="post-card-image">
+                <img src="${post.coverPhoto}" alt="${post.title}" loading="lazy">
             </div>` :
-            `<div class="w-full h-48 bg-gradient-to-br from-accent-500 via-blue-500 to-purple-600 rounded-t-2xl flex items-center justify-center relative overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-br from-accent-500/80 to-blue-600/80"></div>
-                <span class="text-white text-4xl font-bold font-space relative z-10">${post.title.charAt(0)}</span>
-                <div class="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
-                <div class="absolute -bottom-4 -left-4 w-16 h-16 bg-white/10 rounded-full blur-lg"></div>
+            `<div class="post-card-image post-card-placeholder">
+                <span class="post-card-initial">${post.title.charAt(0)}</span>
             </div>`;
 
-        const tags = post.tagArray ? post.tagArray.map(tag => 
-            `<span class="tag px-3 py-1 bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 rounded-full text-xs font-medium hover:bg-accent-200 dark:hover:bg-accent-800/50 transition-all duration-200 cursor-pointer" data-tag="${tag}">${tag}</span>`
-        ).join('') : '';
-
         return `
-            <article class="post-card group cursor-pointer" data-slug="${post.slug}">
+            <article class="post-card" data-slug="${post.slug}">
                 ${coverImage}
-                <div class="p-6 space-y-4">
-                    <!-- Meta Information -->
-                    <div class="flex items-center justify-between text-sm">
-                        <div class="flex items-center gap-3">
-                            <div class="flex items-center gap-1 text-accent-600 dark:text-accent-400">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
-                                </svg>
-                                <span class="font-medium">${post.readingTime} min read</span>
-                            </div>
-                            <div class="text-tech-500 dark:text-tech-400">${post.formattedDate}</div>
-                        </div>
-                        ${post.category ? `<div class="category-badge text-xs">${post.category}</div>` : ''}
+                <div class="post-card-content">
+                    <!-- Date and Category -->
+                    <div class="post-card-meta">
+                        <time class="post-card-date">${post.formattedDate}</time>
+                        ${post.category ? `<span class="post-card-category">${post.category}</span>` : ''}
                     </div>
                     
                     <!-- Title -->
-                    <h3 class="text-xl font-bold font-space text-tech-800 dark:text-tech-100 group-hover:text-accent-600 dark:group-hover:text-accent-400 transition-colors duration-300 leading-tight">
+                    <h3 class="post-card-title">
                         ${post.title}
                     </h3>
                     
-                    <!-- Excerpt -->
-                    <p class="text-tech-600 dark:text-tech-300 line-clamp-3 leading-relaxed">
+                    <!-- Description -->
+                    <p class="post-card-excerpt">
                         ${post.excerpt}
                     </p>
                     
-                    <!-- Tags -->
-                    ${tags ? `<div class="flex flex-wrap gap-2">${tags}</div>` : ''}
-                    
                     <!-- Footer -->
-                    <div class="flex items-center justify-between pt-2 border-t border-tech-200/50 dark:border-tech-700/50">
-                        <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 bg-gradient-to-br from-accent-500 to-blue-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
-                                ${post.author ? post.author.charAt(0).toUpperCase() : 'A'}
-                            </div>
-                            <span class="text-sm font-medium text-tech-700 dark:text-tech-300">By ${post.author}</span>
+                    <div class="post-card-footer">
+                        <div class="post-card-author">
+                            <span class="post-card-author-initial">${post.author ? post.author.charAt(0).toUpperCase() : 'A'}</span>
+                            <span class="post-card-author-name">${post.author}</span>
                         </div>
-                        <div class="flex items-center gap-1 text-accent-600 dark:text-accent-400 group-hover:gap-2 transition-all duration-300">
-                            <span class="text-sm font-medium">Read more</span>
-                            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                            </svg>
-                        </div>
+                        <button class="post-card-read-more">
+                            Read more →
+                        </button>
                     </div>
                 </div>
             </article>

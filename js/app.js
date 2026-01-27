@@ -51,7 +51,6 @@ class BlogApp {
         this.setupAnalytics();
         
         this.initialized = true;
-        console.log('Modern blog app initialized successfully');
     }
 
     initModernAnimations() {
@@ -253,7 +252,6 @@ class BlogApp {
         document.getElementById('installBtn').addEventListener('click', async () => {
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
-            console.log(`User ${outcome} the install prompt`);
             document.body.removeChild(installBanner);
         });
         
@@ -275,8 +273,6 @@ class BlogApp {
             if ('performance' in window) {
                 const navigation = performance.getEntriesByType('navigation')[0];
                 const loadTime = navigation.loadEventEnd - navigation.loadEventStart;
-                
-                console.log(`Page load time: ${loadTime}ms`);
                 
                 // Log performance metrics (optional)
                 if (loadTime > 3000) {
@@ -385,12 +381,10 @@ class BlogApp {
         // This is a placeholder for analytics tracking
         
         const trackPageView = (route) => {
-            console.log(`Page view: ${route}`);
             // Example: gtag('config', 'GA_MEASUREMENT_ID', { page_path: route });
         };
 
         const trackEvent = (action, category, label) => {
-            console.log(`Event: ${action} | ${category} | ${label}`);
             // Example: gtag('event', action, { event_category: category, event_label: label });
         };
 
@@ -431,7 +425,6 @@ class BlogApp {
         const stopReading = () => {
             if (isReading) {
                 const readTime = Date.now() - startTime;
-                console.log(`Reading time: ${Math.round(readTime / 1000)}s`);
                 isReading = false;
             }
         };
@@ -452,7 +445,7 @@ class BlogApp {
         // Report scroll engagement when leaving page
         window.addEventListener('beforeunload', () => {
             if (router.currentRoute === 'post' && maxScroll > 0) {
-                console.log(`Max scroll: ${maxScroll}%`);
+                // Track max scroll percentage
             }
         });
     }
