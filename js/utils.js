@@ -84,13 +84,8 @@ function hideLoading() {
 // Show error message
 function showError(message, container = null) {
     const errorHTML = `
-        <div class="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg mb-4">
-            <div class="flex items-center">
-                <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                </svg>
-                <span>${message}</span>
-            </div>
+        <div style="border:1px solid var(--color-border);padding:1rem 1.25rem;margin-bottom:1rem;border-radius:4px;color:var(--color-text-muted);font-family:var(--font-ui);font-size:0.9rem">
+            ${message}
         </div>
     `;
     
@@ -142,24 +137,24 @@ async function copyToClipboard(text) {
 // Show toast notification
 function showToast(message, type = 'success', duration = 3000) {
     const toast = document.createElement('div');
-    const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
-    
-    toast.className = `fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300`;
     toast.textContent = message;
-    
+    toast.style.cssText = `
+        position:fixed;top:1rem;right:1rem;z-index:9999;
+        padding:0.75rem 1.25rem;
+        background:var(--color-text);color:var(--color-bg);
+        font-family:var(--font-ui);font-size:0.85rem;font-weight:500;
+        border-radius:4px;
+        transform:translateX(120%);transition:transform 0.3s ease;
+    `;
     document.body.appendChild(toast);
     
     // Animate in
-    setTimeout(() => {
-        toast.classList.remove('translate-x-full');
-    }, 100);
+    setTimeout(() => { toast.style.transform = 'translateX(0)'; }, 50);
     
     // Animate out and remove
     setTimeout(() => {
-        toast.classList.add('translate-x-full');
-        setTimeout(() => {
-            document.body.removeChild(toast);
-        }, 300);
+        toast.style.transform = 'translateX(120%)';
+        setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 300);
     }, duration);
 }
 

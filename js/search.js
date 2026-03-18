@@ -149,36 +149,15 @@ class SearchManager {
     renderSearchResult(post, query) {
         const highlightedTitle = highlightSearchTerms(post.title, query);
         const highlightedExcerpt = highlightSearchTerms(post.excerpt, query);
-        
-        const coverImage = post.coverPhoto ? 
-            `<img src="${post.coverPhoto}" alt="${post.title}" loading="lazy">` :
-            `<div class="search-result-placeholder">
-                <span>${post.title.charAt(0)}</span>
-            </div>`;
 
         return `
             <article class="search-result-item" data-slug="${post.slug}">
-                <div class="search-result-image">
-                    ${coverImage}
-                </div>
-                <div class="search-result-content">
-                    <div class="search-result-meta">
-                        <time>${post.formattedDate}</time>
-                        ${post.category ? `<span class="search-result-category">${post.category}</span>` : ''}
-                    </div>
-                    
-                    <h3 class="search-result-title">
-                        ${highlightedTitle}
-                    </h3>
-                    
-                    <p class="search-result-excerpt">
-                        ${highlightedExcerpt}
-                    </p>
-                    
-                    <div class="search-result-footer">
-                        <span class="search-result-author">By ${post.author}</span>
-                        <span class="search-result-arrow">→</span>
-                    </div>
+                <h3 class="search-result-title">${highlightedTitle}</h3>
+                <p class="search-result-excerpt">${highlightedExcerpt}</p>
+                <div class="search-result-meta">
+                    <span>${post.formattedDate || ''}</span>
+                    ${post.category ? ` · <span>${post.category}</span>` : ''}
+                    ${post.readingTime ? ` · <span>${post.readingTime} min read</span>` : ''}
                 </div>
             </article>
         `;
