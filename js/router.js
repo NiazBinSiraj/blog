@@ -3,6 +3,10 @@
  * Reader-first design: minimal, clean HTML output
  */
 
+const SITE_BASE_URL = 'https://blog.niazbinsiraj.com';
+const SITE_NAME = 'Niaz Bin Siraj';
+const SITE_DESCRIPTION = 'Niaz Bin Siraj writes about competitive programming, mathematics, science, and software engineering. Articles in English and Bengali.';
+
 class Router {
     constructor() {
         this.routes = {};
@@ -205,32 +209,61 @@ class Router {
         });
     }
 
-    resetToDefaultMetaTags() {
-        document.title = 'Niaz Bin Siraj - Personal Blog';
-        const metaDescription = document.querySelector('meta[name="description"]');
-        if (metaDescription) {
-            metaDescription.content = 'Personal blog by Niaz Bin Siraj - Software Engineer. Sharing insights on web development, technology, and more.';
+    // ---- SEO Helpers ----
+
+    setRobotsMeta(content) {
+        let tag = document.querySelector('meta[name="robots"]');
+        if (!tag) {
+            tag = document.createElement('meta');
+            tag.name = 'robots';
+            document.head.appendChild(tag);
         }
+        tag.content = content;
+    }
+
+    setCanonical(url) {
+        const canonical = document.querySelector('link[rel="canonical"]');
+        if (canonical) canonical.href = url;
+    }
+
+    setMetaDescription(content) {
+        let tag = document.querySelector('meta[name="description"]');
+        if (!tag) {
+            tag = document.createElement('meta');
+            tag.name = 'description';
+            document.head.appendChild(tag);
+        }
+        tag.content = content;
+    }
+
+    removeJsonLd() {
+        document.querySelectorAll('script[data-seo-dynamic]').forEach(s => s.remove());
+    }
+
+    resetToDefaultMetaTags() {
+        document.title = SITE_NAME + ' \u2014 Competitive Programming, Mathematics, Science & Technology';
+        this.setMetaDescription(SITE_DESCRIPTION);
+        this.setRobotsMeta('index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1');
+        this.setCanonical(SITE_BASE_URL + '/');
 
         const defaultTags = {
-            'og:title': 'Niaz Bin Siraj - Personal Blog',
-            'og:description': 'Personal blog by Niaz Bin Siraj - Software Engineer.',
-            'og:url': 'https://niazbinsiraj.github.io/blog/',
+            'og:title': SITE_NAME + ' \u2014 Competitive Programming, Mathematics, Science & Technology',
+            'og:description': SITE_DESCRIPTION,
+            'og:url': SITE_BASE_URL + '/',
             'og:type': 'website',
-            'twitter:title': 'Niaz Bin Siraj - Personal Blog',
-            'twitter:description': 'Personal blog by Niaz Bin Siraj - Software Engineer.',
+            'og:site_name': SITE_NAME,
+            'twitter:title': SITE_NAME + ' \u2014 Competitive Programming, Mathematics, Science & Technology',
+            'twitter:description': SITE_DESCRIPTION,
             'twitter:card': 'summary_large_image'
         };
 
         Object.entries(defaultTags).forEach(([prop, content]) => {
-            const tag = document.querySelector(`meta[property="${prop}"]`);
+            let tag = document.querySelector(`meta[property="${prop}"]`) || document.querySelector(`meta[name="${prop}"]`);
             if (tag) tag.content = content;
         });
 
         document.querySelectorAll('meta[property^="article:"]').forEach(t => t.remove());
-
-        const canonical = document.querySelector('link[rel="canonical"]');
-        if (canonical) canonical.href = 'https://niazbinsiraj.github.io/blog/';
+        this.removeJsonLd();
     }
 
     // =================== ROUTE HANDLERS ===================
@@ -246,7 +279,7 @@ class Router {
             let content = `
                 <div class="home-header">
                     <h1>Latest Posts</h1>
-                    <p>Thoughts on software engineering, technology, and more.</p>
+                    <p>Thoughts on competitive programming, mathematics, science, and software engineering.</p>
                 </div>
             `;
 
@@ -274,6 +307,8 @@ class Router {
     async renderAllPosts() {
         showLoading();
         this.resetToDefaultMetaTags();
+        document.title = 'All Posts | ' + SITE_NAME;
+        this.setCanonical(SITE_BASE_URL + '/#posts');
 
         try {
             await postManager.loadAllPosts();
@@ -333,6 +368,9 @@ class Router {
     async renderCategories() {
         showLoading();
         this.resetToDefaultMetaTags();
+        document.title = 'Categories | ' + SITE_NAME;
+        this.setMetaDescription('Browse articles by topic on ' + SITE_NAME + '. Explore posts on competitive programming, math, science, and software engineering.');
+        this.setCanonical(SITE_BASE_URL + '/#categories');
 
         try {
             await postManager.loadAllPosts();
@@ -373,6 +411,9 @@ class Router {
     async renderTags() {
         showLoading();
         this.resetToDefaultMetaTags();
+        document.title = 'Tags | ' + SITE_NAME;
+        this.setMetaDescription('Discover articles by tag on ' + SITE_NAME + '. Topics include competitive programming, mathematics, science, and more.');
+        this.setCanonical(SITE_BASE_URL + '/#tags');
 
         try {
             await postManager.loadAllPosts();
@@ -409,6 +450,20 @@ class Router {
         const searchTerm = params.query || '';
         const category = params.category || '';
         const tag = params.tag || '';
+
+        // SEO: noindex search results
+        this.setRobotsMeta('noindex, follow');
+
+        if (category) {
+            document.title = category + ' Articles | ' + SITE_NAME;
+            this.setMetaDescription('All articles about ' + category + ' on ' + SITE_NAME + '. Explore posts on competitive programming, math, and science.');
+        } else if (tag) {
+            document.title = tag + ' Articles | ' + SITE_NAME;
+            this.setMetaDescription('All articles tagged ' + tag + ' on ' + SITE_NAME + '.');
+        } else if (searchTerm) {
+            document.title = 'Search: ' + searchTerm + ' | ' + SITE_NAME;
+        }
+
         if (typeof searchManager !== 'undefined') {
             searchManager.performSearch(searchTerm, { category, tag });
         }
@@ -416,7 +471,9 @@ class Router {
 
     renderAbout() {
         this.resetToDefaultMetaTags();
-        document.title = 'About - Niaz Bin Siraj';
+        document.title = 'About | ' + SITE_NAME;
+        this.setMetaDescription('Niaz Bin Siraj is a software engineer who writes about competitive programming, mathematics, science, and technology in English and Bengali.');
+        this.setCanonical(SITE_BASE_URL + '/#about');
 
         const content = `
             <div class="about-page">
@@ -462,14 +519,23 @@ class Router {
 
     render404() {
         this.resetToDefaultMetaTags();
-        document.title = '404 - Page Not Found';
+        document.title = 'Page Not Found | ' + SITE_NAME;
+        this.setRobotsMeta('noindex, nofollow');
 
         document.getElementById('main-content').innerHTML = `
             <div class="error-page">
                 <div class="error-code">404</div>
                 <h1>Page Not Found</h1>
                 <p>The page you're looking for doesn't exist or has been moved.</p>
-                <button class="btn-primary" data-route="home">Go Home</button>
+                <p><a href="#home" data-route="home">&larr; Back to Homepage</a></p>
+                <div class="error-page-links">
+                    <p>Or explore topics:</p>
+                    <ul>
+                        <li><a href="#" data-route="categories">Categories</a></li>
+                        <li><a href="#" data-route="tags">Tags</a></li>
+                        <li><a href="#" data-route="posts">All Posts</a></li>
+                    </ul>
+                </div>
             </div>
         `;
     }

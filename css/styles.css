@@ -1127,6 +1127,75 @@ mark, .highlight, .search-highlight {
     margin-bottom: 1.5rem;
 }
 
+.error-page a {
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.error-page a:hover {
+    text-decoration: underline;
+}
+
+.error-page-links {
+    margin-top: 1.5rem;
+    text-align: left;
+    display: inline-block;
+}
+
+.error-page-links p {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+}
+
+.error-page-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.error-page-links ul li {
+    margin-bottom: 0.5rem;
+}
+
+.error-page-links ul li a {
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+}
+
+/* ===== RELATED POSTS ===== */
+.related-posts {
+    margin: 1rem 0;
+}
+
+.related-posts h3 {
+    font-family: var(--font-ui);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.75rem;
+}
+
+.related-posts ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.related-posts ul li {
+    margin-bottom: 0.5rem;
+}
+
+.related-posts ul li a {
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.related-posts ul li a:hover {
+    color: var(--color-accent);
+}
+
 /* ===== READING PREFERENCES PANEL ===== */
 #prefs-panel {
     position: fixed;
