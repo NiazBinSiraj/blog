@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Niaz Bin Siraj - Personal Blog</title>
     <meta name="description" content="Personal blog by Niaz Bin Siraj - Software Engineer. Sharing insights on web development, technology, and more.">
     <meta name="author" content="Niaz Bin Siraj">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://niazbinsiraj.github.io/blog/">
@@ -28,156 +28,146 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://niazbinsiraj.github.io/blog/">
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FOUC-free Preference Loader — must be before CSS -->
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'serif': ['Georgia', 'Cambria', 'Times New Roman', 'serif'],
-                        'sans': ['Inter', 'system-ui', 'sans-serif'],
-                        'mono': ['Menlo', 'Monaco', 'Consolas', 'monospace'],
-                    },
-                    colors: {
-                        'ink': {
-                            50: '#fafafa',
-                            100: '#f5f5f5',
-                            200: '#e5e5e5',
-                            300: '#d4d4d4',
-                            400: '#a3a3a3',
-                            500: '#737373',
-                            600: '#525252',
-                            700: '#404040',
-                            800: '#262626',
-                            900: '#171717',
-                            950: '#0a0a0a',
-                        }
-                    }
-                }
-            }
-        }
+    (function() {
+      try {
+        var p = JSON.parse(localStorage.getItem('blog_reading_prefs') || '{}');
+        var r = document.documentElement.style;
+        var themes = {
+          light:  ['#ffffff','#1a1a1a','#6b6b6b','#e5e5e5','#f7f7f7'],
+          dark:   ['#0f0f0f','#e8e8e8','#999999','#2a2a2a','#1a1a1a'],
+          sepia:  ['#f4efe6','#3b2f1e','#7a6b5a','#d9d0c3','#ebe4d8'],
+          custom: [p.customBg||'#ffffff', p.customText||'#1a1a1a','#6b6b6b','#e5e5e5','#f7f7f7']
+        };
+        var t = themes[p.theme] || themes.light;
+        r.setProperty('--color-bg', t[0]);
+        r.setProperty('--color-text', t[1]);
+        r.setProperty('--color-text-muted', t[2]);
+        r.setProperty('--color-border', t[3]);
+        r.setProperty('--color-surface', t[4]);
+        if (p.fontFamily) r.setProperty('--font-body', {
+          serif: "Georgia,'Times New Roman',serif",
+          humanist: "'Literata','Charter',serif",
+          mono: "'iA Writer Mono','Courier New',monospace",
+          custom: p.customFont || 'system-ui'
+        }[p.fontFamily] || 'system-ui,-apple-system,sans-serif');
+        if (p.fontSize) r.setProperty('--font-size-base', p.fontSize + 'px');
+        if (p.fontWeight) r.setProperty('--font-weight-body', p.fontWeight);
+        if (p.contentWidth) r.setProperty('--content-width', p.contentWidth + 'px');
+        if (p.lineHeight) r.setProperty('--line-height-body', p.lineHeight);
+        if (p.wordSpacing !== undefined) r.setProperty('--word-spacing-body', p.wordSpacing + 'px');
+        if (p.letterSpacing !== undefined) r.setProperty('--letter-spacing-body', p.letterSpacing + 'px');
+        if (p.paragraphSpacing) r.setProperty('--paragraph-spacing', p.paragraphSpacing + 'em');
+        document.documentElement.setAttribute('data-theme', p.theme || 'light');
+      } catch(e) {}
+    })();
     </script>
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/styles.css">
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Literata:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="bg-white dark:bg-ink-950 text-ink-800 dark:text-ink-200 font-sans min-h-screen">
-    <div class="flex min-h-screen">
-        <!-- Sidebar -->
-        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-ink-50 dark:bg-ink-900 border-r border-ink-200 dark:border-ink-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
-            <div class="flex flex-col h-full">
-                <!-- Profile Section -->
-                <div class="p-8 text-center border-b border-ink-200 dark:border-ink-800">
-                    <div class="mb-4">
-                        <img src="static/images/profile.jpg" alt="Niaz Bin Siraj" class="w-24 h-24 rounded-full mx-auto object-cover border-2 border-ink-300 dark:border-ink-600 grayscale">
-                    </div>
-                    <h1 class="text-xl font-sans font-semibold text-ink-900 dark:text-ink-100 mb-1">Niaz Bin Siraj</h1>
-                    <p class="text-ink-500 dark:text-ink-400 text-sm font-sans">Software Engineer</p>
-                </div>
+<body>
+    <!-- Reading Progress Bar (post pages only, injected by JS) -->
 
-                <!-- Search Bar -->
-                <div class="px-6 py-4">
-                    <div class="relative">
-                        <input type="text" id="searchInput" placeholder="Search posts..." class="w-full px-4 py-3 pl-10 bg-white dark:bg-ink-800 border border-ink-200 dark:border-ink-700 rounded-md focus:outline-none focus:border-ink-400 dark:focus:border-ink-500 text-ink-800 dark:text-ink-200 placeholder-ink-400 font-sans text-sm">
-                        <button id="searchBtn" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-ink-400">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Navigation Menu -->
-                <nav class="flex-1 px-6 py-4 space-y-1">
-                    <a href="#" data-route="home" class="nav-link flex items-center px-4 py-2.5 rounded text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 font-sans text-sm">
-                        <svg class="w-4 h-4 mr-3 text-ink-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-                        </svg>
-                        <span>Home</span>
-                    </a>
-                    
-                    <a href="#" data-route="posts" class="nav-link flex items-center px-4 py-2.5 rounded text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 font-sans text-sm">
-                        <svg class="w-4 h-4 mr-3 text-ink-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path>
-                        </svg>
-                        <span>All Posts</span>
-                    </a>
-                    
-                    <a href="#" data-route="categories" class="nav-link flex items-center px-4 py-2.5 rounded text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 font-sans text-sm">
-                        <svg class="w-4 h-4 mr-3 text-ink-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
-                        </svg>
-                        <span>Categories</span>
-                    </a>
-                    
-                    <a href="#" data-route="tags" class="nav-link flex items-center px-4 py-2.5 rounded text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 font-sans text-sm">
-                        <svg class="w-4 h-4 mr-3 text-ink-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
-                        </svg>
-                        <span>Tags</span>
-                    </a>
-                    
-                    <a href="#" data-route="about" class="nav-link flex items-center px-4 py-2.5 rounded text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 font-sans text-sm">
-                        <svg class="w-4 h-4 mr-3 text-ink-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
-                        </svg>
-                        <span>About</span>
-                    </a>
-                </nav>
-
-                <!-- Theme Toggle -->
-                <div class="p-6 mt-auto border-t border-ink-200 dark:border-ink-800">
-                    <button id="themeToggle" class="w-full flex items-center justify-center px-4 py-2.5 bg-ink-100 dark:bg-ink-800 hover:bg-ink-200 dark:hover:bg-ink-700 text-ink-600 dark:text-ink-300 rounded font-sans text-sm">
-                        <span id="themeIcon" class="mr-2">🌙</span>
-                        <span id="themeText">Dark Mode</span>
-                    </button>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Mobile Sidebar Overlay -->
-        <div id="sidebarOverlay" class="fixed inset-0 bg-black/30 z-40 lg:hidden hidden"></div>
-
-        <!-- Main Content -->
-        <main class="flex-1 lg:ml-72">
-            <!-- Mobile Sidebar Toggle -->
-            <div class="lg:hidden fixed top-4 left-4 z-50">
-                <button id="sidebarToggle" class="p-2.5 bg-white dark:bg-ink-900 border border-ink-200 dark:border-ink-700 rounded">
-                    <svg class="w-5 h-5 text-ink-600 dark:text-ink-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <!-- Top Bar -->
+    <header id="top-bar">
+        <div class="top-bar-inner">
+            <a href="#" class="blog-title" data-route="home">Niaz Bin Siraj</a>
+            <nav class="desktop-nav">
+                <a href="#" data-route="home">Home</a>
+                <a href="#" data-route="posts">Posts</a>
+                <a href="#" data-route="categories">Categories</a>
+                <a href="#" data-route="tags">Tags</a>
+                <a href="#" data-route="about">About</a>
+            </nav>
+            <div class="top-bar-actions">
+                <button id="searchToggle" class="top-bar-btn" aria-label="Search">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+                <button id="prefsToggle" class="top-bar-btn" aria-label="Reading preferences">Aa</button>
+                <button id="navToggle" class="top-bar-btn mobile-only" aria-label="Menu">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
             </div>
+        </div>
+        <!-- Search Bar (hidden by default, toggled) -->
+        <div id="search-bar" class="search-bar hidden">
+            <input type="text" id="searchInput" placeholder="Search posts..." aria-label="Search blog posts">
+        </div>
+    </header>
 
-            <!-- Content Area -->
-            <div id="content" class="min-h-screen p-6 lg:p-12">
-                <div class="w-full mx-auto">
-                    <!-- Dynamic Content Area -->
-                    <div id="main-content" class="space-y-8">
-                        <!-- Content will be loaded here -->
-                    </div>
-                </div>
+    <!-- Mobile Nav Drawer -->
+    <nav id="mobile-nav" class="mobile-nav hidden">
+        <a href="#" data-route="home">Home</a>
+        <a href="#" data-route="posts">All Posts</a>
+        <a href="#" data-route="categories">Categories</a>
+        <a href="#" data-route="tags">Tags</a>
+        <a href="#" data-route="about">About</a>
+    </nav>
+    <div id="nav-overlay" class="nav-overlay hidden"></div>
+
+    <!-- Layout Wrapper: Sidebar + Content -->
+    <div id="layout-wrapper">
+        <!-- Desktop Sidebar (left) -->
+        <aside id="sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">Categories</h3>
+                <ul id="sidebar-categories" class="sidebar-list">
+                    <!-- Populated dynamically by JS -->
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main id="content">
+            <div id="main-content">
+                <!-- Dynamic content loaded here by router -->
             </div>
         </main>
+
+        <!-- Right Sidebar (tags) -->
+        <aside id="sidebar-right">
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">Tags</h3>
+                <div id="sidebar-tags" class="sidebar-tag-cloud">
+                    <!-- Populated dynamically by JS -->
+                </div>
+            </div>
+        </aside>
     </div>
 
+    <!-- Footer -->
+    <footer id="site-footer">
+        <div class="footer-inner">
+            <span>&copy; 2025 Niaz Bin Siraj</span>
+            <span class="footer-links">
+                <a href="#" data-route="about">About</a>
+                <a href="https://github.com/NiazBinSiraj" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://linkedin.com/in/niazbinsiraj" target="_blank" rel="noopener">LinkedIn</a>
+            </span>
+        </div>
+    </footer>
+
     <!-- Scroll to Top Button -->
-    <button id="scrollToTop" class="fixed bottom-6 right-6 w-10 h-10 bg-ink-800 dark:bg-ink-200 hover:bg-ink-700 dark:hover:bg-ink-300 text-white dark:text-ink-900 rounded-full opacity-0 invisible">
-        <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+    <button id="scrollToTop" class="scroll-to-top" aria-label="Scroll to top">
+        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
         </svg>
     </button>
 
     <!-- Loading Spinner -->
-    <div id="loadingSpinner" class="fixed inset-0 bg-white dark:bg-ink-950 bg-opacity-90 flex items-center justify-center z-50 hidden">
-        <div class="w-8 h-8 border-2 border-ink-300 border-t-ink-800 rounded-full animate-spin"></div>
+    <div id="loadingSpinner" class="loading-overlay hidden">
+        <div class="spinner"></div>
     </div>
 
     <!-- JavaScript Files -->
