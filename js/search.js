@@ -68,6 +68,11 @@ class SearchManager {
             
             // Perform search
             this.searchResults = postManager.searchPosts(trimmedQuery);
+
+            // GA4: Track search event
+            if (typeof gaTrackEvent === 'function') {
+                gaTrackEvent('search', { search_term: trimmedQuery });
+            }
             
             // Navigate to search results
             router.navigate('search', { query: trimmedQuery });
@@ -194,6 +199,11 @@ class SearchManager {
             // Filter posts by tag
             this.searchResults = postManager.getPostsByTag(tagName);
             this.currentQuery = tagName;
+
+            // GA4: Track tag search
+            if (typeof gaTrackEvent === 'function') {
+                gaTrackEvent('search_by_tag', { tag_name: tagName });
+            }
             
             // Update URL and render results
             updateURL(`#/search?query=${encodeURIComponent(tagName)}`);
@@ -217,6 +227,11 @@ class SearchManager {
             // Filter posts by category
             this.searchResults = postManager.getPostsByCategory(categoryName);
             this.currentQuery = categoryName;
+
+            // GA4: Track category search
+            if (typeof gaTrackEvent === 'function') {
+                gaTrackEvent('search_by_category', { category_name: categoryName });
+            }
             
             // Update URL and render results
             updateURL(`#/search?query=${encodeURIComponent(categoryName)}`);

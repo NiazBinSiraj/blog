@@ -243,7 +243,7 @@ class PostManager {
             <div class="related-posts">
                 <h3>Related Articles</h3>
                 <ul>
-                    ${related.map(p => `<li><a href="#post/${p.slug}">${p.title}</a></li>`).join('')}
+                    ${related.map(p => `<li><a href="#post/${p.slug}" onclick="if(typeof gaTrackEvent==='function')gaTrackEvent('click_related_post',{post_title:'${p.title.replace(/'/g, "\\'").replace(/"/g, '&quot;')}',post_slug:'${p.slug}'})">${p.title}</a></li>`).join('')}
                 </ul>
             </div>
             <hr class="post-divider">
@@ -258,10 +258,10 @@ class PostManager {
         return `
             <div class="share-links">
                 <span style="color:var(--color-text-muted);font-weight:500">Share:</span>
-                <a href="https://twitter.com/intent/tweet?url=${url}&text=${title}" target="_blank" rel="noopener">Twitter</a>
-                <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" rel="noopener">Facebook</a>
-                <a href="https://www.linkedin.com/sharing/share-offsite/?url=${url}" target="_blank" rel="noopener">LinkedIn</a>
-                <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>showToast('Link copied!'))">Copy Link</button>
+                <a href="https://twitter.com/intent/tweet?url=${url}&text=${title}" target="_blank" rel="noopener" onclick="if(typeof gaTrackEvent==='function')gaTrackEvent('share',{method:'twitter',content_type:'post',item_id:'${post.slug}'})">Twitter</a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" rel="noopener" onclick="if(typeof gaTrackEvent==='function')gaTrackEvent('share',{method:'facebook',content_type:'post',item_id:'${post.slug}'})">Facebook</a>
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url=${url}" target="_blank" rel="noopener" onclick="if(typeof gaTrackEvent==='function')gaTrackEvent('share',{method:'linkedin',content_type:'post',item_id:'${post.slug}'})">LinkedIn</a>
+                <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{showToast('Link copied!');if(typeof gaTrackEvent==='function')gaTrackEvent('share',{method:'copy_link',content_type:'post',item_id:'${post.slug}'})})">Copy Link</button>
             </div>
         `;
     }

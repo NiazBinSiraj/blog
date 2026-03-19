@@ -266,7 +266,11 @@ class ReadingPreferences {
 
                 this.apply();
                 this.save();
-            });
+
+                // GA4: Track theme change
+                if (typeof gaTrackEvent === 'function') {
+                    gaTrackEvent('theme_change', { theme_name: this.prefs.theme });
+                }
         });
 
         // Custom color pickers
@@ -302,6 +306,11 @@ class ReadingPreferences {
 
                 this.apply();
                 this.save();
+
+                // GA4: Track font change
+                if (typeof gaTrackEvent === 'function') {
+                    gaTrackEvent('font_change', { font_family: this.prefs.fontFamily });
+                }
             });
         });
 

@@ -46,6 +46,11 @@ class BlogApp {
 
         btn.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // GA4: Track scroll to top
+            if (typeof gaTrackEvent === 'function') {
+                gaTrackEvent('scroll_to_top');
+            }
         });
     }
 

@@ -133,6 +133,11 @@ class Router {
         // Scroll to top on route change
         window.scrollTo(0, 0);
 
+        // GA4: Track virtual page view for SPA navigation
+        if (typeof gaTrackPageView === 'function') {
+            gaTrackPageView('/' + hash, document.title);
+        }
+
         // Handle progress bar
         if (typeof blogApp !== 'undefined') {
             if (targetRoute === 'post') {
@@ -357,6 +362,16 @@ class Router {
 
             postManager.updateMetaTags(post);
             document.getElementById('main-content').innerHTML = postManager.renderFullPost(post);
+
+            // GA4: Track post view
+            if (typeof gaTrackEvent === 'function') {
+                gaTrackEvent('post_view', {
+                    post_title: post.title,
+                    post_slug: post.slug,
+                    post_category: post.category || '',
+                    post_author: post.author
+                });
+            }
         } catch (error) {
             console.error('Error loading post:', error);
             showError('Failed to load post.');
