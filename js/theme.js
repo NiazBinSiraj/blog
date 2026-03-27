@@ -17,7 +17,8 @@ const PREF_DEFAULTS = {
     lineHeight: 1.75,
     wordSpacing: 0,
     letterSpacing: 0,
-    paragraphSpacing: 1.25
+    paragraphSpacing: 1.25,
+    textAlign: 'left'
 };
 
 const PREF_KEY = 'blog_reading_prefs';
@@ -106,6 +107,7 @@ class ReadingPreferences {
         r.setProperty('--word-spacing-body', p.wordSpacing + 'px');
         r.setProperty('--letter-spacing-body', p.letterSpacing + 'px');
         r.setProperty('--paragraph-spacing', p.paragraphSpacing + 'em');
+        r.setProperty('--text-align-body', p.textAlign);
 
         document.documentElement.setAttribute('data-theme', p.theme === 'custom' ? 'custom' : p.theme);
     }
@@ -144,6 +146,7 @@ class ReadingPreferences {
         this.wireFontSelector();
         this.wireSliders();
         this.wireWeightSelector();
+        this.wireAlignmentSelector();
         this.wireResetButton();
     }
 
@@ -248,6 +251,17 @@ class ReadingPreferences {
                     <input type="range" class="pref-slider" id="paraSpacingSlider" min="0.5" max="2.5" step="0.25" value="${p.paragraphSpacing}">
                 </div>
 
+                <!-- Text Alignment -->
+                <div class="pref-group">
+                    <div class="pref-label">Text Alignment</div>
+                    <div class="segmented-control">
+                        <button class="segment-btn align-btn${p.textAlign==='left' ? ' active' : ''}" data-align="left">Left</button>
+                        <button class="segment-btn align-btn${p.textAlign==='center' ? ' active' : ''}" data-align="center">Center</button>
+                        <button class="segment-btn align-btn${p.textAlign==='right' ? ' active' : ''}" data-align="right">Right</button>
+                        <button class="segment-btn align-btn${p.textAlign==='justify' ? ' active' : ''}" data-align="justify">Justify</button>
+                    </div>
+                </div>
+
                 <!-- Reset -->
                 <button class="prefs-reset" id="prefsReset">Reset to Defaults</button>
             </div>
@@ -271,6 +285,7 @@ class ReadingPreferences {
                 if (typeof gaTrackEvent === 'function') {
                     gaTrackEvent('theme_change', { theme_name: this.prefs.theme });
                 }
+            });
         });
 
         // Custom color pickers
@@ -351,11 +366,23 @@ class ReadingPreferences {
     }
 
     wireWeightSelector() {
-        this.panel.querySelectorAll('.segment-btn').forEach(btn => {
+        this.panel.querySelectorAll('.segment-btn:not(.align-btn)').forEach(btn => {
             btn.addEventListener('click', () => {
-                this.panel.querySelectorAll('.segment-btn').forEach(b => b.classList.remove('active'));
+                this.panel.querySelectorAll('.segment-btn:not(.align-btn)').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 this.prefs.fontWeight = parseInt(btn.dataset.weight);
+                this.apply();
+                this.save();
+            });
+        });
+    }
+
+    wireAlignmentSelector() {
+        this.panel.querySelectorAll('.align-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.panel.querySelectorAll('.align-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.prefs.textAlign = btn.dataset.align;
                 this.apply();
                 this.save();
             });
@@ -377,6 +404,7 @@ class ReadingPreferences {
                 this.wireFontSelector();
                 this.wireSliders();
                 this.wireWeightSelector();
+                this.wireAlignmentSelector();
                 this.wireResetButton();
             });
         }

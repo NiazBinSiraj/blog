@@ -16,6 +16,7 @@
     --word-spacing-body: 0px;
     --letter-spacing-body: 0px;
     --paragraph-spacing: 1.25em;
+    --text-align-body: left;
     --content-width: 680px;
 
     /* Theme colors — Light (default) */
@@ -646,6 +647,7 @@ a:hover {
     line-height: var(--line-height-body);
     word-spacing: var(--word-spacing-body);
     letter-spacing: var(--letter-spacing-body);
+    text-align: var(--text-align-body);
 }
 
 .post-content p {
