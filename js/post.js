@@ -56,7 +56,7 @@ class PostManager {
             try {
                 const response = await fetch(`static/posts/${slug}.json`);
                 if (response.ok) existingSlugs.push(slug);
-            } catch (e) {}
+            } catch (e) { }
         }
         return existingSlugs;
     }
@@ -70,8 +70,13 @@ class PostManager {
             if (!this.validatePost(post)) throw new Error(`Invalid post: ${slug}`);
 
             post.processedContent = replacePhotoPlaceholders(post.contents, post.photos || []);
-            post.excerpt = generateExcerpt(post.contents);
-            post.readingTime = calculateReadingTime(extractTextFromHTML(post.contents));
+
+            // Use excerpt from JSON if provided, otherwise generate from content
+            post.excerpt = post.excerpt || generateExcerpt(post.contents);
+
+            // Use readingTimeMinutes from JSON if provided, otherwise compute
+            post.readingTime = post.readingTimeMinutes || calculateReadingTime(extractTextFromHTML(post.contents));
+
             post.formattedDate = formatDate(post.date);
 
             // Short date for list items
@@ -116,104 +121,149 @@ class PostManager {
         const q = query.toLowerCase();
         return this.posts.filter(post => {
             return post.title.toLowerCase().includes(q) ||
-                   extractTextFromHTML(post.contents).toLowerCase().includes(q) ||
-                   (post.tagArray && post.tagArray.some(t => t.toLowerCase().includes(q))) ||
-                   (post.category && post.category.toLowerCase().includes(q));
+                extractTextFromHTML(post.contents).toLowerCase().includes(q) ||
+                (post.tagArray && post.tagArray.some(t => t.toLowerCase().includes(q))) ||
+                (post.category && post.category.toLowerCase().includes(q));
         });
     }
 
-    // ---- Minimal post list item (homepage/all posts) ----
+    // ---- Post list item matching editorial reference ----
     renderPostListItem(post) {
-        const labels = post.tagArray && post.tagArray.length > 0
-            ? `<div class="post-list-labels">${post.tagArray.slice(0, 3).map(t => `<span class="label-pill" data-tag="${t}">${t}</span>`).join('')}</div>`
-            : (post.category ? `<div class="post-list-labels"><span class="label-pill">${post.category}</span></div>` : '');
+        const dateFormatted = new Date(post.date).toISOString().slice(0, 10).replace(/-/g, '.');
+        const tags = (post.tagArray || []).slice(0, 3);
+        const tagHTML = tags.map(t => '<span class="post-item-tag">#' + t + '</span>').join('');
 
-        const image = post.coverPhoto
-            ? `<div class="post-list-image"><img src="${post.coverPhoto}" alt="${post.title}" loading="lazy"></div>`
-            : '';
+        const thumbSrc = post.thumbnail || post.coverPhoto || 'static/images/profile.jpg';
 
-        return `
-            <article class="post-list-item" data-slug="${post.slug}">
-                ${image}
-                ${labels}
-                <h2 class="post-list-title">${post.title}</h2>
-                <p class="post-list-excerpt">${post.excerpt}</p>
-                <div class="post-list-meta">
-                    <span>${post.shortDate}</span>
-                    <span>${post.readingTime} min read</span>
-                </div>
-            </article>
-        `;
+        return '<article class="post-list-item" data-slug="' + post.slug + '" data-category="' + (post.category || '') + '">' +
+            '<div class="post-item-inner">' +
+            '<img src="' + thumbSrc + '" alt="' + post.title + '" class="post-item-thumb" loading="lazy">' +
+            '<div class="post-item-content">' +
+            '<div class="post-item-meta">' +
+            '<span class="post-item-date">' + dateFormatted + '</span>' +
+            '<span class="dot-sep">&bull;</span>' +
+            (post.category ? '<span class="post-item-category">' + post.category + '</span><span class="dot-sep">&bull;</span>' : '') +
+            '<span class="post-item-reading">' + post.readingTime + ' min read</span>' +
+            '</div>' +
+            '<a href="#post/' + post.slug + '" class="post-item-title">' + post.title + '</a>' +
+            '<p class="post-item-excerpt">' + post.excerpt + '</p>' +
+            (tagHTML ? '<div class="post-item-tags">' + tagHTML + '</div>' : '') +
+            '</div>' +
+            '</div>' +
+            '</article>';
     }
 
-    // ---- Full post — pure reading mode ----
+    // ---- Full post - editorial reading mode ----
     renderFullPost(post) {
         if (!post) {
             return '<div style="text-align:center;padding:4rem 0"><p>Post not found.</p></div>';
         }
 
-        const labels = post.tagArray && post.tagArray.length > 0
-            ? `<div class="post-labels">${post.tagArray.map(t => `<span class="label-pill" data-tag="${t}">${t}</span>`).join('')}</div>`
-            : (post.category ? `<div class="post-labels"><span class="label-pill">${post.category}</span></div>` : '');
+        let labels = '';
+        if (post.tagArray && post.tagArray.length > 0) {
+            const visibleTags = post.tagArray.slice(0, 4);
+            const remaining = post.tagArray.length - 4;
+            labels = '<div class="post-labels">' + visibleTags.map(t => '<span class="label-pill" data-tag="' + t + '">' + t + '</span>').join('') + (remaining > 0 ? '<span class="label-pill label-pill-more">+' + remaining + ' more</span>' : '') + '</div>';
+        } else if (post.category) {
+            labels = '<div class="post-labels"><span class="label-pill">' + post.category + '</span></div>';
+        }
 
         const coverImage = post.coverPhoto
-            ? `<div class="post-list-image" style="margin-bottom:1.5rem"><img src="${post.coverPhoto}" alt="${post.title}" loading="lazy"></div>`
+            ? '<div class="post-cover-image"><img src="' + post.coverPhoto + '" alt="' + post.title + '" loading="lazy"></div>'
             : '';
 
+        const wordCount = extractTextFromHTML(post.contents).split(/\s+/).length;
+        const dateDisplay = new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         const navigation = this.renderPostNavigation(post);
         const shareLinks = this.renderShareLinks(post);
         const relatedPosts = this.renderRelatedPosts(post);
 
-        return `
-            <article>
-                <header class="post-header">
-                    <h1>${post.title}</h1>
-                    ${labels}
-                    <div class="post-meta">
-                        <span>${post.author}</span>
-                        <span>${post.formattedDate}</span>
-                        <span>${post.readingTime} min read</span>
-                    </div>
-                    <hr class="post-divider">
-                </header>
-
-                ${coverImage}
-
-                <div class="post-content">
-                    ${post.processedContent || post.contents}
-                </div>
-
-                <footer>
-                    <hr class="post-divider">
-                    ${shareLinks}
-                    <hr class="post-divider">
-                    ${relatedPosts}
-                    ${navigation}
-                    <div class="author-bio">
-                        <img src="static/images/profile.jpg" alt="${post.author}">
-                        <div class="author-bio-text">
-                            <strong>${post.author}</strong><br>
-                            Software Engineer
-                        </div>
-                    </div>
-                </footer>
-            </article>
-        `;
+        return '<article style="max-width:64rem;margin:0 auto">' +
+            '<header class="post-header">' +
+            // Breadcrumbs
+            '<div class="post-breadcrumbs">' +
+            '<div class="breadcrumb-path">' +
+            '<a href="#" data-route="home">Home</a><span>/</span>' +
+            '<span class="breadcrumb-current">' + (post.category || 'Post') + '</span>' +
+            '</div>' +
+            '<div class="breadcrumb-metrics">' +
+            '<span class="metric"><span class="material-symbols-outlined">calendar_today</span> ' + dateDisplay + '</span>' +
+            '<span class="dot-sep">&bull;</span>' +
+            '<span class="metric"><span class="material-symbols-outlined">schedule</span> ' + post.readingTime + ' min read</span>' +
+            '<span class="dot-sep">&bull;</span>' +
+            '<span class="metric"><span class="material-symbols-outlined">notes</span> ' + wordCount.toLocaleString() + ' words</span>' +
+            '</div>' +
+            '</div>' +
+            // Title
+            '<h1>' + post.title + '</h1>' +
+            // Subtitle (excerpt)
+            '<p class="post-subtitle">' + post.excerpt + '</p>' +
+            // Author byline
+            '<div class="post-author-byline">' +
+            '<div class="author-info">' +
+            '<img src="static/images/profile.jpg" alt="' + post.author + '">' +
+            '<div><div class="author-name-row">' +
+            '<span class="author-name">' + post.author + '</span>' +
+            '<span class="author-role-badge">Software Engineer</span>' +
+            '</div>' +
+            '<span class="author-subtitle">Software Engineering // System Design</span>' +
+            '</div></div>' +
+            '</div>' +
+            '</header>' +
+            coverImage +
+            '<div class="post-content">' + (post.processedContent || post.contents) + '</div>' +
+            '<footer>' +
+            // Social bar
+            '<div class="post-social-bar">' +
+            '<div class="social-links"><span>Share this post:</span>' +
+            '<a href="https://twitter.com/intent/tweet?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent(post.title) + '" target="_blank" rel="noopener"><span class="material-symbols-outlined" style="font-size:16px">share</span> Twitter</a>' +
+            '</div>' +
+            '<button type="button" class="share-btn" onclick="navigator.clipboard&&navigator.clipboard.writeText(window.location.href).then(()=>alert(\'URL copied!\'))"><span class="material-symbols-outlined">content_copy</span><span>Copy Link</span></button>' +
+            '</div>' +
+            // Author bio card
+            '<div class="author-bio">' +
+            '<img src="static/images/profile.jpg" alt="' + post.author + '">' +
+            '<div class="author-bio-text">' +
+            '<div class="author-bio-name-row">' +
+            '<span class="author-bio-name">Written by ' + post.author + '</span>' +
+            '<span class="author-bio-badge">Software Engineer</span>' +
+            '</div>' +
+            '<p class="author-bio-blurb">Writing about software engineering, system design, and the craft of building resilient software.</p>' +
+            '<div class="author-bio-links">' +
+            '<a href="https://github.com/NiazBinSiraj" target="_blank" rel="noopener">Follow on GitHub</a>' +
+            '<a href="mailto:niazbinsiraj@gmail.com">Subscribe via Email</a>' +
+            '</div></div></div>' +
+            relatedPosts +
+            navigation +
+            '</footer></article>';
     }
 
-    // ---- Post navigation (← Previous | Next →) ----
+    // ---- Post navigation (card style) ----
     renderPostNavigation(currentPost) {
         const sortedPosts = this.posts.sort((a, b) => new Date(b.date) - new Date(a.date));
         const idx = sortedPosts.findIndex(p => p.slug === currentPost.slug);
         const prevPost = idx < sortedPosts.length - 1 ? sortedPosts[idx + 1] : null;
         const nextPost = idx > 0 ? sortedPosts[idx - 1] : null;
 
-        return `
-            <div class="post-nav">
-                ${prevPost ? `<a href="#post/${prevPost.slug}">← ${prevPost.title}</a>` : '<span></span>'}
-                ${nextPost ? `<a href="#post/${nextPost.slug}">${nextPost.title} →</a>` : '<span></span>'}
-            </div>
-        `;
+        let html = '<nav class="post-nav" aria-label="Article pagination">';
+        if (prevPost) {
+            html += '<a href="#post/' + prevPost.slug + '">' +
+                '<span class="post-nav-label"><span class="material-symbols-outlined">arrow_back</span> Previous Post</span>' +
+                '<span class="post-nav-title">' + prevPost.title + '</span>' +
+                '<span class="post-nav-excerpt">' + (prevPost.excerpt || '') + '</span></a>';
+        } else {
+            html += '<span></span>';
+        }
+        if (nextPost) {
+            html += '<a href="#post/' + nextPost.slug + '" class="post-nav-next">' +
+                '<span class="post-nav-label">Next Post <span class="material-symbols-outlined">arrow_forward</span></span>' +
+                '<span class="post-nav-title">' + nextPost.title + '</span>' +
+                '<span class="post-nav-excerpt">' + (nextPost.excerpt || '') + '</span></a>';
+        } else {
+            html += '<span></span>';
+        }
+        html += '</nav>';
+        return html;
     }
 
     // ---- Related posts by category/tags ----

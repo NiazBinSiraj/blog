@@ -1,156 +1,110 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- SEO: Title -->
-    <title>Niaz Bin Siraj — Competitive Programming, Mathematics, Science &amp; Technology</title>
-
-    <!-- SEO: Meta Description -->
-    <meta name="description" content="Niaz Bin Siraj writes about competitive programming, mathematics, science, and software engineering. Articles in English and Bengali.">
+    <!-- SEO -->
+    <title>Niaz Bin Siraj - Software Engineering, Systems & Technology</title>
+    <meta name="description"
+        content="Niaz Bin Siraj writes about software engineering, system design, and technology. Long-form posts and technical deep dives.">
     <meta name="author" content="Niaz Bin Siraj">
-
-    <!-- SEO: Robots -->
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-
-    <!-- SEO: Language -->
     <meta http-equiv="content-language" content="bn, en">
 
-    <!-- SEO: Open Graph / Facebook -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://blog.niazbinsiraj.com/">
-    <meta property="og:title" content="Niaz Bin Siraj — Competitive Programming, Mathematics, Science &amp; Technology">
-    <meta property="og:description" content="Niaz Bin Siraj writes about competitive programming, mathematics, science, and software engineering. Articles in English and Bengali.">
+    <meta property="og:title" content="Niaz Bin Siraj - Software Engineering, Systems & Technology">
+    <meta property="og:description"
+        content="Niaz Bin Siraj writes about software engineering, system design, and technology.">
     <meta property="og:image" content="https://blog.niazbinsiraj.com/static/images/profile.jpg">
-    <meta property="og:image:alt" content="Niaz Bin Siraj — Software Engineer">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
     <meta property="og:site_name" content="Niaz Bin Siraj">
-
-    <!-- SEO: Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@niazbinsiraj">
-    <meta name="twitter:title" content="Niaz Bin Siraj — Competitive Programming, Mathematics, Science &amp; Technology">
-    <meta name="twitter:description" content="Niaz Bin Siraj writes about competitive programming, mathematics, science, and software engineering. Articles in English and Bengali.">
-    <meta name="twitter:image" content="https://blog.niazbinsiraj.com/static/images/profile.jpg">
-    <meta name="twitter:image:alt" content="Niaz Bin Siraj — Software Engineer">
-
-    <!-- SEO: Canonical URL -->
+    <meta name="twitter:title" content="Niaz Bin Siraj - Software Engineering, Systems & Technology">
     <link rel="canonical" href="https://blog.niazbinsiraj.com/">
 
-    <!-- SEO: Homepage Structured Data (JSON-LD) -->
+    <!-- Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Blog",
       "name": "Niaz Bin Siraj",
       "url": "https://blog.niazbinsiraj.com/",
-      "description": "Competitive programming, mathematics, science, and software engineering — by Niaz Bin Siraj.",
+      "description": "Software engineering, system design, and technology - by Niaz Bin Siraj.",
       "inLanguage": ["en", "bn"],
-      "author": {
-        "@type": "Person",
-        "name": "Niaz Bin Siraj",
-        "url": "https://blog.niazbinsiraj.com/"
-      }
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Niaz Bin Siraj",
-      "url": "https://blog.niazbinsiraj.com/",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": "https://blog.niazbinsiraj.com/#search?query={search_term_string}"
-        },
-        "query-input": "required name=search_term_string"
-      }
+      "author": { "@type": "Person", "name": "Niaz Bin Siraj", "url": "https://blog.niazbinsiraj.com/" }
     }
     </script>
 
-    <!-- Performance: Preconnect -->
+    <!-- Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.google.com">
-    <link rel="preconnect" href="https://www.googletagmanager.com">
-    <link rel="dns-prefetch" href="//www.google-analytics.com">
-    <link rel="dns-prefetch" href="//img.youtube.com">
 
-    <!-- FOUC-free Preference Loader — must be before CSS -->
+    <!-- FOUC-free Preference Loader -->
     <script>
-    (function() {
-      try {
-        var p = JSON.parse(localStorage.getItem('blog_reading_prefs') || '{}');
-        var r = document.documentElement.style;
-        var themes = {
-          light:  ['#ffffff','#1a1a1a','#6b6b6b','#e5e5e5','#f7f7f7'],
-          dark:   ['#0f0f0f','#e8e8e8','#999999','#2a2a2a','#1a1a1a'],
-          sepia:  ['#f4efe6','#3b2f1e','#7a6b5a','#d9d0c3','#ebe4d8'],
-          custom: [p.customBg||'#ffffff', p.customText||'#1a1a1a','#6b6b6b','#e5e5e5','#f7f7f7']
-        };
-        var t = themes[p.theme] || themes.light;
-        r.setProperty('--color-bg', t[0]);
-        r.setProperty('--color-text', t[1]);
-        r.setProperty('--color-text-muted', t[2]);
-        r.setProperty('--color-border', t[3]);
-        r.setProperty('--color-surface', t[4]);
-        if (p.fontFamily) r.setProperty('--font-body', {
-          serif: "Georgia,'Times New Roman',serif",
-          humanist: "'Literata','Charter',serif",
-          mono: "'iA Writer Mono','Courier New',monospace",
-          custom: p.customFont || 'system-ui'
-        }[p.fontFamily] || 'system-ui,-apple-system,sans-serif');
-        if (p.fontSize) r.setProperty('--font-size-base', p.fontSize + 'px');
-        if (p.fontWeight) r.setProperty('--font-weight-body', p.fontWeight);
-        if (p.contentWidth) r.setProperty('--content-width', p.contentWidth + 'px');
-        if (p.lineHeight) r.setProperty('--line-height-body', p.lineHeight);
-        if (p.wordSpacing !== undefined) r.setProperty('--word-spacing-body', p.wordSpacing + 'px');
-        if (p.letterSpacing !== undefined) r.setProperty('--letter-spacing-body', p.letterSpacing + 'px');
-        if (p.paragraphSpacing) r.setProperty('--paragraph-spacing', p.paragraphSpacing + 'em');
-        document.documentElement.setAttribute('data-theme', p.theme || 'light');
-      } catch(e) {}
-    })();
+        (function () {
+            try {
+                var p = JSON.parse(localStorage.getItem('blog_reading_prefs') || '{}');
+                var r = document.documentElement.style;
+                var themes = {
+                    light: ['#fff8f5', '#1e1b19'],
+                    dark: ['#1a1714', '#ede8e3'],
+                    sepia: ['#f4efe6', '#3b2f1e'],
+                    custom: [p.customBg || '#fff8f5', p.customText || '#1e1b19']
+                };
+                var t = themes[p.theme] || themes.light;
+                r.setProperty('--surface', t[0]);
+                r.setProperty('--on-surface', t[1]);
+                if (p.fontSize) r.setProperty('--font-size-base', p.fontSize + 'px');
+                if (p.lineHeight) r.setProperty('--line-height-body', p.lineHeight + 'px');
+                if (p.contentWidth) r.setProperty('--content-width', p.contentWidth + 'px');
+                document.documentElement.setAttribute('data-theme', p.theme || 'light');
+            } catch (e) { }
+        })();
     </script>
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Literata:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-
-    <!-- Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
-    <!-- Reading Progress Bar (post pages only, injected by JS) -->
+    <!-- Reading Progress Bar -->
+    <div id="reading-progress"></div>
 
     <!-- Top Bar -->
     <header id="top-bar">
         <div class="top-bar-inner">
-            <a href="#" class="blog-title" data-route="home">Niaz Bin Siraj</a>
+            <div class="header-brand">
+                <a href="#" class="blog-title" data-route="home">
+                    Niaz Bin Siraj
+                </a>
+            </div>
             <nav class="desktop-nav">
                 <a href="#" data-route="home">Home</a>
-                <a href="#" data-route="posts">Posts</a>
+                <a href="#" data-route="posts">All Posts</a>
                 <a href="#" data-route="categories">Categories</a>
                 <a href="#" data-route="tags">Tags</a>
-                <a href="#" data-route="about">About</a>
+                <a href="#" data-route="contact">Contact</a>
             </nav>
             <div class="top-bar-actions">
                 <button id="searchToggle" class="top-bar-btn" aria-label="Search">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
+                    <span class="material-symbols-outlined" style="font-size:18px">search</span>
+                    <span class="top-bar-search-hint">Cmd+K</span>
                 </button>
-                <button id="prefsToggle" class="top-bar-btn" aria-label="Reading preferences">Aa</button>
-                <button id="navToggle" class="top-bar-btn mobile-only" aria-label="Menu">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
+                <button id="prefsToggle" class="top-bar-icon-btn" aria-label="Reading preferences">
+                    <span class="material-symbols-outlined" style="font-size:20px">dark_mode</span>
+                </button>
+                <div style="padding-left:var(--space-xs);display:flex;align-items:center">
+                    <img alt="Profile" class="profile-avatar" src="static/images/profile.jpg"
+                        style="width:32px;height:32px;border-radius:9999px;object-fit:cover;box-shadow:0 0 0 1px rgba(199,196,216,0.4)">
+                </div>
+                <button id="navToggle" class="top-bar-icon-btn mobile-only" aria-label="Menu">
+                    <span class="material-symbols-outlined" style="font-size:20px">menu</span>
                 </button>
             </div>
         </div>
-        <!-- Search Bar (hidden by default, toggled) -->
         <div id="search-bar" class="search-bar hidden">
             <input type="text" id="searchInput" placeholder="Search posts..." aria-label="Search blog posts">
         </div>
@@ -162,57 +116,86 @@
         <a href="#" data-route="posts">All Posts</a>
         <a href="#" data-route="categories">Categories</a>
         <a href="#" data-route="tags">Tags</a>
-        <a href="#" data-route="about">About</a>
+        <a href="#" data-route="contact">Contact</a>
     </nav>
     <div id="nav-overlay" class="nav-overlay hidden"></div>
 
-    <!-- Layout Wrapper: Sidebar + Content -->
+    <!-- Layout Wrapper -->
     <div id="layout-wrapper">
-        <!-- Desktop Sidebar (left) -->
         <aside id="sidebar">
             <div class="sidebar-section">
                 <h3 class="sidebar-heading">Categories</h3>
-                <ul id="sidebar-categories" class="sidebar-list">
-                    <!-- Populated dynamically by JS -->
-                </ul>
+                <ul id="sidebar-categories" class="sidebar-list"></ul>
             </div>
         </aside>
 
-        <!-- Main Content Area -->
         <main id="content">
-            <div id="main-content">
-                <!-- Dynamic content loaded here by router -->
-            </div>
+            <div id="main-content"></div>
         </main>
 
-        <!-- Right Sidebar (tags) -->
         <aside id="sidebar-right">
             <div class="sidebar-section">
                 <h3 class="sidebar-heading">Tags</h3>
-                <div id="sidebar-tags" class="sidebar-tag-cloud">
-                    <!-- Populated dynamically by JS -->
-                </div>
+                <div id="sidebar-tags" class="sidebar-tag-cloud"></div>
             </div>
         </aside>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer (3-column editorial) -->
     <footer id="site-footer">
         <div class="footer-inner">
-            <span>&copy; 2025 Niaz Bin Siraj</span>
-            <span class="footer-links">
-                <a href="#" data-route="about">About</a>
-                <a href="https://github.com/NiazBinSiraj" target="_blank" rel="noopener">GitHub</a>
-                <a href="https://linkedin.com/in/niazbinsiraj" target="_blank" rel="noopener">LinkedIn</a>
-            </span>
+            <div class="footer-grid">
+                <div>
+                    <span class="footer-section-label">Dispatch & Synthesis</span>
+                    <h3 class="footer-section-title">Dispatches on Systems & Craft</h3>
+                    <p class="footer-section-desc">Long-form posts on systems architecture, engineering craft, and
+                        software design. Zero noise, high density.</p>
+                    <form class="footer-subscribe-form" id="newsletter-form">
+                        <input type="email" name="email" placeholder="architect@domain.xyz" required>
+                        <button type="submit">Subscribe</button>
+                    </form>
+                    <p id="newsletter-msg" class="newsletter-msg hidden"></p>
+                </div>
+                <div>
+                    <span class="footer-section-label muted">Reading Metrics</span>
+                    <div class="footer-metric">
+                        <span class="material-symbols-outlined">timer</span>
+                        <span>Total Archive Reading Time: <strong id="footer-total-reading">12 min</strong></span>
+                    </div>
+                    <div class="footer-metric">
+                        <span class="material-symbols-outlined">menu_book</span>
+                        <span>Published Entries: <strong id="footer-total-posts">1 Article</strong></span>
+                    </div>
+                </div>
+                <div>
+                    <span class="footer-section-label muted">Outposts</span>
+                    <div class="footer-outpost-list">
+                        <a href="https://github.com/NiazBinSiraj" target="_blank" rel="noopener" class="footer-outpost">
+                            <span class="material-symbols-outlined">terminal</span>
+                            <span>GitHub // @NiazBinSiraj</span>
+                        </a>
+                        <a href="https://linkedin.com/in/niazbinsiraj" target="_blank" rel="noopener"
+                            class="footer-outpost">
+                            <span class="material-symbols-outlined">alternate_email</span>
+                            <span>LinkedIn // Niaz Bin Siraj</span>
+                        </a>
+                        <a href="mailto:niazbinsiraj@gmail.com" class="footer-outpost">
+                            <span class="material-symbols-outlined">mail</span>
+                            <span>Email</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">&copy; <span id="copyright-year">2025</span> Niaz Bin Siraj. All rights
+                    reserved.</p>
+            </div>
         </div>
     </footer>
 
-    <!-- Scroll to Top Button -->
+    <!-- Scroll to Top -->
     <button id="scrollToTop" class="scroll-to-top" aria-label="Scroll to top">
-        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
-        </svg>
+        <span class="material-symbols-outlined" style="font-size:18px">keyboard_arrow_up</span>
     </button>
 
     <!-- Loading Spinner -->
@@ -220,7 +203,8 @@
         <div class="spinner"></div>
     </div>
 
-    <!-- JavaScript Files -->
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/theme.js"></script>
     <script src="js/search.js"></script>
@@ -229,4 +213,5 @@
     <script src="js/router.js"></script>
     <script src="js/app.js"></script>
 </body>
+
 </html>

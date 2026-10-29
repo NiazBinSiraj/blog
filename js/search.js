@@ -154,15 +154,21 @@ class SearchManager {
     renderSearchResult(post, query) {
         const highlightedTitle = highlightSearchTerms(post.title, query);
         const highlightedExcerpt = highlightSearchTerms(post.excerpt, query);
+        const thumbSrc = post.thumbnail || post.coverPhoto || 'static/images/profile.jpg';
 
         return `
             <article class="search-result-item" data-slug="${post.slug}">
-                <h3 class="search-result-title">${highlightedTitle}</h3>
-                <p class="search-result-excerpt">${highlightedExcerpt}</p>
-                <div class="search-result-meta">
-                    <span>${post.formattedDate || ''}</span>
-                    ${post.category ? ` · <span>${post.category}</span>` : ''}
-                    ${post.readingTime ? ` · <span>${post.readingTime} min read</span>` : ''}
+                <div class="search-result-inner">
+                    <img src="${thumbSrc}" alt="${post.title}" class="post-item-thumb" loading="lazy">
+                    <div class="search-result-content">
+                        <h3 class="search-result-title">${highlightedTitle}</h3>
+                        <p class="search-result-excerpt">${highlightedExcerpt}</p>
+                        <div class="search-result-meta">
+                            <span>${post.formattedDate || ''}</span>
+                            ${post.category ? ` · <span>${post.category}</span>` : ''}
+                            ${post.readingTime ? ` · <span>${post.readingTime} min read</span>` : ''}
+                        </div>
+                    </div>
                 </div>
             </article>
         `;
@@ -205,9 +211,8 @@ class SearchManager {
                 gaTrackEvent('search_by_tag', { tag_name: tagName });
             }
             
-            // Update URL and render results
-            updateURL(`#/search?query=${encodeURIComponent(tagName)}`);
-            this.renderSearchResults(tagName);
+            // Navigate using router for proper URL format
+            router.navigate('search', { tag: tagName });
             
         } catch (error) {
             console.error('Tag search error:', error);
@@ -233,9 +238,8 @@ class SearchManager {
                 gaTrackEvent('search_by_category', { category_name: categoryName });
             }
             
-            // Update URL and render results
-            updateURL(`#/search?query=${encodeURIComponent(categoryName)}`);
-            this.renderSearchResults(categoryName);
+            // Navigate using router for proper URL format
+            router.navigate('search', { category: categoryName });
             
         } catch (error) {
             console.error('Category search error:', error);

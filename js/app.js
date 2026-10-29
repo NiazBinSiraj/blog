@@ -27,8 +27,62 @@ class BlogApp {
         this.setupMobileNav();
         this.setupAccessibility();
         this.setupErrorHandling();
+        this.updateCopyrightYear();
+        this.setupNewsletter();
 
         this.initialized = true;
+    }
+
+    // ---- Newsletter (Buttondown) ----
+    setupNewsletter() {
+        const form = document.getElementById('newsletter-form');
+        if (!form) return;
+
+        const BUTTONDOWN_USERNAME = 'niazbinsiraj'; // Replace with your Buttondown username
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const emailInput = form.querySelector('input[name="email"]');
+            const btn = form.querySelector('button');
+            const msgEl = document.getElementById('newsletter-msg');
+            const email = emailInput.value.trim();
+            if (!email) return;
+
+            btn.disabled = true;
+            btn.textContent = 'Subscribing...';
+            msgEl.classList.add('hidden');
+
+            try {
+                const res = await fetch(`https://buttondown.com/api/emails/embed-subscribe/${BUTTONDOWN_USERNAME}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `email=${encodeURIComponent(email)}`
+                });
+
+                if (res.ok || res.status === 201) {
+                    msgEl.textContent = 'Subscribed! Check your email to confirm.';
+                    msgEl.className = 'newsletter-msg success';
+                    emailInput.value = '';
+                } else {
+                    throw new Error('Subscription failed.');
+                }
+            } catch (err) {
+                msgEl.textContent = err.message || 'Something went wrong. Try again.';
+                msgEl.className = 'newsletter-msg error';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Subscribe';
+                msgEl.classList.remove('hidden');
+            }
+        });
+    }
+
+    // ---- Dynamic Copyright Year ----
+    updateCopyrightYear() {
+        const yearEl = document.getElementById('copyright-year');
+        if (yearEl) {
+            yearEl.textContent = new Date().getFullYear();
+        }
     }
 
     // ---- Scroll to Top ----

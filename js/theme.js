@@ -11,30 +11,30 @@ const PREF_DEFAULTS = {
     customText: '#1a1a1a',
     fontFamily: 'system',
     customFont: '',
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: 400,
-    contentWidth: 680,
+    contentWidth: 800,
     lineHeight: 1.75,
     wordSpacing: 0,
     letterSpacing: 0,
     paragraphSpacing: 1.25,
-    textAlign: 'left'
+    textAlign: 'justify'
 };
 
 const PREF_KEY = 'blog_reading_prefs';
 
 // Theme definitions
 const THEME_COLORS = {
-    light:  { bg: '#ffffff', text: '#1a1a1a', muted: '#6b6b6b', border: '#e5e5e5', surface: '#f7f7f7' },
-    dark:   { bg: '#0f0f0f', text: '#e8e8e8', muted: '#999999', border: '#2a2a2a', surface: '#1a1a1a' },
+    light:  { bg: '#fff8f5', text: '#1e1b19', muted: '#78716c', border: '#e7e5e0', surface: '#f4f4f0' },
+    dark:   { bg: '#1a1714', text: '#ede8e3', muted: '#a8a29e', border: '#3d3a36', surface: '#252220' },
     sepia:  { bg: '#f4efe6', text: '#3b2f1e', muted: '#7a6b5a', border: '#d9d0c3', surface: '#ebe4d8' }
 };
 
 const FONT_FAMILIES = {
-    system:   'system-ui, -apple-system, sans-serif',
+    system:   "'Literata', 'Charter', serif",
     serif:    "Georgia, 'Times New Roman', serif",
     humanist: "'Literata', 'Charter', serif",
-    mono:     "'iA Writer Mono', 'Courier New', monospace"
+    mono:     "'JetBrains Mono', 'Courier New', monospace"
 };
 
 class ReadingPreferences {
@@ -79,18 +79,18 @@ class ReadingPreferences {
 
         // Theme colors
         if (p.theme === 'custom') {
-            r.setProperty('--color-bg', p.customBg);
-            r.setProperty('--color-text', p.customText);
-            r.setProperty('--color-text-muted', '#6b6b6b');
-            r.setProperty('--color-border', '#e5e5e5');
-            r.setProperty('--color-surface', '#f7f7f7');
+            r.setProperty('--surface', p.customBg);
+            r.setProperty('--on-surface', p.customText);
+            r.setProperty('--on-surface-variant', '#6b6b6b');
+            r.setProperty('--outline-variant', '#e5e5e5');
+            r.setProperty('--surface-container', '#f7f7f7');
         } else {
             const colors = THEME_COLORS[p.theme] || THEME_COLORS.light;
-            r.setProperty('--color-bg', colors.bg);
-            r.setProperty('--color-text', colors.text);
-            r.setProperty('--color-text-muted', colors.muted);
-            r.setProperty('--color-border', colors.border);
-            r.setProperty('--color-surface', colors.surface);
+            r.setProperty('--surface', colors.bg);
+            r.setProperty('--on-surface', colors.text);
+            r.setProperty('--on-surface-variant', colors.muted);
+            r.setProperty('--outline-variant', colors.border);
+            r.setProperty('--surface-container', colors.surface);
         }
 
         // Font family
@@ -224,7 +224,7 @@ class ReadingPreferences {
                 <!-- Content Width -->
                 <div class="pref-group">
                     <div class="pref-label">Content Width <span class="pref-value" id="contentWidthVal">${p.contentWidth}px</span></div>
-                    <input type="range" class="pref-slider" id="contentWidthSlider" min="480" max="900" step="10" value="${p.contentWidth}">
+                    <input type="range" class="pref-slider" id="contentWidthSlider" min="480" max="1100" step="10" value="${p.contentWidth}">
                 </div>
 
                 <!-- Line Height -->

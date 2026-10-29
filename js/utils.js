@@ -42,7 +42,10 @@ function extractTextFromHTML(html) {
 
 // Generate excerpt from content
 function generateExcerpt(content, maxLength = 150) {
-    const text = extractTextFromHTML(content);
+    let text = extractTextFromHTML(content);
+    // Strip common meta-prefixes that shouldn't appear in excerpts
+    text = text.replace(/^Meta\s+description:\s*/i, '');
+    text = text.trim();
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength).trim() + '...';
 }
