@@ -103,7 +103,7 @@ class Router {
         navOverlay?.classList.remove('visible');
     }
 
-    handleRouteChange(path = null) {
+    async handleRouteChange(path = null) {
         const hash = path || window.location.hash.slice(1);
         const [routePath, queryString] = hash.split('?');
         const pathParts = routePath.split('/').filter(p => p);
@@ -121,7 +121,7 @@ class Router {
             this.currentRoute = targetRoute;
             this.currentParams = routeParams;
             try {
-                this.routes[targetRoute](routeParams);
+                await this.routes[targetRoute](routeParams);
             } catch (error) {
                 console.error('Route error:', error);
                 this.render404();
@@ -153,11 +153,9 @@ class Router {
             }
         }
 
-        // Populate sidebars (after a tick to let posts load)
-        setTimeout(() => {
-            this.populateSidebar();
-            this.populateTagCloud();
-        }, 200);
+        // Populate sidebars after the route handler (and its post loading) has completed
+        this.populateSidebar();
+        this.populateTagCloud();
     }
 
     populateSidebar() {
