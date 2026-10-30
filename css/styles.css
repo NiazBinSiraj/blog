@@ -1923,6 +1923,446 @@ a.hero-bio-chip:hover {
     letter-spacing: 0.02em;
 }
 
+/* ===== POST RICH VISUAL ELEMENTS ===== */
+
+/* --- Callout / Info Boxes --- */
+.post-content .callout-box {
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    margin: var(--space-xl) 0;
+    display: flex;
+    gap: var(--space-md);
+    align-items: flex-start;
+}
+.post-content .callout-box .callout-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+    line-height: 1;
+    margin-top: 2px;
+}
+.post-content .callout-box .callout-body {
+    flex: 1;
+}
+.post-content .callout-box .callout-title {
+    font-family: var(--font-headline);
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: var(--space-xs);
+    letter-spacing: -0.01em;
+}
+.post-content .callout-box .callout-body p {
+    margin-bottom: 0;
+    font-size: 15px;
+    line-height: 24px;
+}
+
+.post-content .callout-info {
+    background: color-mix(in srgb, var(--primary) 8%, var(--surface));
+    border-left: 4px solid var(--primary);
+}
+.post-content .callout-info .callout-icon { color: var(--primary); }
+.post-content .callout-info .callout-title { color: var(--primary); }
+
+.post-content .callout-warning {
+    background: color-mix(in srgb, var(--secondary) 8%, var(--surface));
+    border-left: 4px solid var(--secondary);
+}
+.post-content .callout-warning .callout-icon { color: var(--secondary); }
+.post-content .callout-warning .callout-title { color: var(--secondary); }
+
+.post-content .callout-key {
+    background: color-mix(in srgb, var(--tertiary) 8%, var(--surface));
+    border-left: 4px solid var(--tertiary);
+}
+.post-content .callout-key .callout-icon { color: var(--tertiary); }
+.post-content .callout-key .callout-title { color: var(--tertiary); }
+
+/* --- Figure with Caption --- */
+.post-content figure {
+    margin: var(--space-xl) 0;
+    text-align: center;
+}
+.post-content figure img {
+    margin: 0 auto var(--space-sm);
+    display: block;
+}
+.post-content figcaption {
+    font-family: var(--font-label);
+    font-size: 13px;
+    color: var(--on-surface-variant);
+    letter-spacing: 0.01em;
+    line-height: 20px;
+    font-style: italic;
+}
+
+/* --- Stat / Number Highlight Cards --- */
+.post-content .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: var(--space-md);
+    margin: var(--space-xl) 0;
+}
+.post-content .stat-card {
+    background: var(--surface-container-low);
+    border: 1px solid var(--outline-variant);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg) var(--space-md);
+    text-align: center;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.post-content .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+.post-content .stat-card .stat-number {
+    font-family: var(--font-headline);
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1.1;
+    display: block;
+    margin-bottom: var(--space-xs);
+}
+.post-content .stat-card .stat-label {
+    font-family: var(--font-label);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--on-surface-variant);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+.post-content .stat-card .stat-detail {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--on-surface-variant);
+    margin-top: var(--space-xs);
+    line-height: 18px;
+}
+
+/* --- Comparison / Visual Bar Chart --- */
+.post-content .comparison-bars {
+    margin: var(--space-xl) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+.post-content .bar-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.post-content .bar-item .bar-label {
+    font-family: var(--font-label);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--on-surface);
+    display: flex;
+    justify-content: space-between;
+}
+.post-content .bar-item .bar-label span:last-child {
+    color: var(--on-surface-variant);
+    font-weight: 400;
+}
+.post-content .bar-track {
+    height: 28px;
+    background: var(--surface-container);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+}
+.post-content .bar-fill {
+    height: 100%;
+    border-radius: 14px;
+    transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+}
+.post-content .bar-fill.bar-fast {
+    background: linear-gradient(90deg, #22c55e, #16a34a);
+}
+.post-content .bar-fill.bar-medium {
+    background: linear-gradient(90deg, var(--secondary), #e67e22);
+}
+.post-content .bar-fill.bar-slow {
+    background: linear-gradient(90deg, var(--error), #dc2626);
+}
+.post-content .bar-fill.bar-primary {
+    background: linear-gradient(90deg, var(--primary), var(--primary-container));
+}
+
+/* --- Equation / Formula Display --- */
+.post-content .equation-block {
+    background: var(--surface-container-low);
+    border: 1px solid var(--outline-variant);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg) var(--space-xl);
+    margin: var(--space-xl) 0;
+    text-align: center;
+    overflow-x: auto;
+}
+.post-content .equation-block .equation {
+    font-family: var(--font-code);
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--on-surface);
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+}
+.post-content .equation-block .equation .eq-highlight {
+    color: var(--primary);
+    font-weight: 700;
+}
+.post-content .equation-block .equation-caption {
+    font-family: var(--font-label);
+    font-size: 13px;
+    color: var(--on-surface-variant);
+    margin-top: var(--space-sm);
+    font-style: italic;
+}
+.post-content .equation-block .equation sup {
+    font-size: 0.7em;
+    vertical-align: super;
+    line-height: 0;
+}
+
+/* --- Definition Box --- */
+.post-content .definition-box {
+    background: var(--surface-container-lowest);
+    border: 2px solid var(--primary);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    margin: var(--space-xl) 0;
+    position: relative;
+}
+.post-content .definition-box .def-badge {
+    position: absolute;
+    top: -12px;
+    left: var(--space-lg);
+    background: var(--primary);
+    color: var(--on-primary);
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 3px 12px;
+    border-radius: 20px;
+}
+.post-content .definition-box .def-term {
+    font-family: var(--font-headline);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--on-surface);
+    margin-top: var(--space-xs);
+    margin-bottom: var(--space-sm);
+}
+.post-content .definition-box p {
+    font-size: 15px;
+    line-height: 24px;
+    margin-bottom: var(--space-xs);
+}
+
+/* --- Timeline / Step Diagram --- */
+.post-content .visual-timeline {
+    margin: var(--space-xl) 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    padding-left: 36px;
+}
+.post-content .visual-timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--primary), var(--outline-variant));
+}
+.post-content .timeline-item {
+    position: relative;
+    padding: var(--space-md) 0 var(--space-md) var(--space-md);
+}
+.post-content .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -27px;
+    top: 20px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 3px solid var(--surface);
+    box-shadow: 0 0 0 2px var(--primary);
+}
+.post-content .timeline-item .timeline-label {
+    font-family: var(--font-label);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+.post-content .timeline-item .timeline-title {
+    font-family: var(--font-headline);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--on-surface);
+    margin-bottom: 4px;
+}
+.post-content .timeline-item .timeline-desc {
+    font-size: 14px;
+    line-height: 22px;
+    color: var(--on-surface-variant);
+}
+
+/* --- Inline Number Highlight --- */
+.post-content .num-highlight {
+    display: inline-block;
+    font-family: var(--font-headline);
+    font-weight: 800;
+    color: var(--primary);
+    background: color-mix(in srgb, var(--primary) 10%, var(--surface));
+    padding: 1px 8px;
+    border-radius: var(--radius);
+    font-variant-numeric: tabular-nums;
+}
+
+/* --- Visual Diagram Container --- */
+.post-content .diagram-container {
+    background: var(--surface-container-low);
+    border: 1px solid var(--outline-variant);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    margin: var(--space-xl) 0;
+    text-align: center;
+    overflow-x: auto;
+}
+.post-content .diagram-container .diagram-title {
+    font-family: var(--font-label);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--on-surface-variant);
+    margin-bottom: var(--space-md);
+}
+.post-content .diagram-container .diagram-caption {
+    font-family: var(--font-label);
+    font-size: 13px;
+    color: var(--on-surface-variant);
+    margin-top: var(--space-md);
+    font-style: italic;
+}
+
+/* Diagram flow arrows */
+.post-content .flow-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    padding: var(--space-md) 0;
+}
+.post-content .flow-node {
+    background: var(--surface-container-highest);
+    border: 2px solid var(--outline-variant);
+    border-radius: var(--radius-xl);
+    padding: var(--space-sm) var(--space-md);
+    font-family: var(--font-label);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--on-surface);
+    white-space: nowrap;
+}
+.post-content .flow-node.flow-node-primary {
+    background: var(--primary);
+    color: var(--on-primary);
+    border-color: var(--primary);
+}
+.post-content .flow-node.flow-node-accent {
+    background: var(--secondary);
+    color: var(--on-secondary);
+    border-color: var(--secondary);
+}
+.post-content .flow-node.flow-node-danger {
+    background: var(--error);
+    color: var(--on-error);
+    border-color: var(--error);
+}
+.post-content .flow-arrow {
+    font-size: 20px;
+    color: var(--on-surface-variant);
+    font-weight: 300;
+}
+
+/* Scale comparison visual */
+.post-content .scale-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+    margin: var(--space-xl) 0;
+}
+.post-content .scale-card {
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    text-align: center;
+}
+.post-content .scale-card.scale-good {
+    background: color-mix(in srgb, #22c55e 10%, var(--surface));
+    border: 1px solid color-mix(in srgb, #22c55e 30%, var(--outline-variant));
+}
+.post-content .scale-card.scale-bad {
+    background: color-mix(in srgb, var(--error) 10%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--error) 30%, var(--outline-variant));
+}
+.post-content .scale-card .scale-label {
+    font-family: var(--font-label);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: var(--space-xs);
+}
+.post-content .scale-card.scale-good .scale-label { color: #16a34a; }
+.post-content .scale-card.scale-bad .scale-label { color: var(--error); }
+.post-content .scale-card .scale-value {
+    font-family: var(--font-headline);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--on-surface);
+    margin-bottom: var(--space-xs);
+}
+.post-content .scale-card .scale-desc {
+    font-size: 13px;
+    color: var(--on-surface-variant);
+    line-height: 18px;
+}
+
+@media (max-width: 600px) {
+    .post-content .stat-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .post-content .scale-compare {
+        grid-template-columns: 1fr;
+    }
+    .post-content .flow-diagram {
+        flex-direction: column;
+    }
+    .post-content .flow-arrow {
+        transform: rotate(90deg);
+    }
+    .post-content .stat-card .stat-number {
+        font-size: 24px;
+    }
+    .post-content .equation-block .equation {
+        font-size: 16px;
+    }
+}
+
+
+
 /* ===== POST FOOTER COMPONENTS ===== */
 
 /* Share/community bar */

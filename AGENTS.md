@@ -139,6 +139,160 @@ The `contents` field is a **single-line string** of HTML. All newlines within co
 | `<a href="...">` | Links |
 | `<img src="..." alt="...">` | Inline images (rare, use only if needed) |
 
+#### Rich Visual Elements
+
+Posts must **not** be walls of text. Use the following visual components to break up content, highlight key numbers, and keep readers engaged. Aim for at least one visual element every 2-3 paragraphs. All styles are defined in `css/styles.css` under the `POST RICH VISUAL ELEMENTS` section.
+
+##### Callout Boxes
+
+Use for tips, warnings, and key insights. Three variants: `callout-info` (blue/primary), `callout-warning` (orange/secondary), `callout-key` (red/tertiary).
+
+```html
+<div class="callout-box callout-info">
+  <span class="callout-icon material-symbols-outlined">lightbulb</span>
+  <div class="callout-body">
+    <div class="callout-title">Think of it this way</div>
+    <p>Your explanatory text here.</p>
+  </div>
+</div>
+```
+
+Common icons: `lightbulb` (tips), `warning` (warnings), `key` (key points), `auto_awesome` (highlights), `gavel` (formal/legal), `info` (general info).
+
+##### Definition Boxes
+
+Use for formal definitions or hypothesis statements. Features a floating badge label.
+
+```html
+<div class="definition-box">
+  <span class="def-badge">Definition</span>
+  <div class="def-term">Term Being Defined</div>
+  <p>The definition or explanation text.</p>
+</div>
+```
+
+##### Stat Card Grids
+
+Use to highlight key numbers in a grid. Great for showing how values scale or for impact summaries.
+
+```html
+<div class="stat-grid">
+  <div class="stat-card">
+    <span class="stat-number">1,024</span>
+    <span class="stat-label">10 Variables</span>
+    <span class="stat-detail">Still fast</span>
+  </div>
+  <!-- More stat-card items -->
+</div>
+```
+
+##### Comparison Bars
+
+Use to visually compare magnitudes. Bar fill classes: `bar-fast` (green), `bar-medium` (orange), `bar-slow` (red), `bar-primary` (theme primary).
+
+```html
+<div class="comparison-bars">
+  <div class="bar-item">
+    <div class="bar-label"><span>Label</span><span>Detail</span></div>
+    <div class="bar-track"><div class="bar-fill bar-fast" style="width: 5%"></div></div>
+  </div>
+  <div class="bar-item">
+    <div class="bar-label"><span>Label</span><span>Detail</span></div>
+    <div class="bar-track"><div class="bar-fill bar-slow" style="width: 100%"></div></div>
+  </div>
+</div>
+```
+
+##### Flow Diagrams
+
+Use for showing sequences, dependency chains, or processes. Node variants: default, `flow-node-primary`, `flow-node-accent`, `flow-node-danger`.
+
+```html
+<div class="diagram-container">
+  <div class="diagram-title">Diagram Title Here</div>
+  <div class="flow-diagram">
+    <span class="flow-node flow-node-primary">Step 1</span>
+    <span class="flow-arrow">&#8594;</span>
+    <span class="flow-node">Step 2</span>
+    <span class="flow-arrow">&#8594;</span>
+    <span class="flow-node flow-node-danger">Step 3</span>
+  </div>
+  <div class="diagram-caption">Caption explaining the diagram.</div>
+</div>
+```
+
+##### Equation / Formula Blocks
+
+Use for mathematical formulas, comparisons, or any content that benefits from monospace centered display. Use `<sup>` for exponents and `<span class="eq-highlight">` for emphasis.
+
+```html
+<div class="equation-block">
+  <div class="equation">Time(n) = <span class="eq-highlight">O(2<sup>n</sup>)</span></div>
+  <div class="equation-caption">Caption explaining the formula.</div>
+</div>
+```
+
+##### Scale Comparison Cards
+
+Use for side-by-side comparisons (good vs bad, before vs after). Variants: `scale-good` (green), `scale-bad` (red).
+
+```html
+<div class="scale-compare">
+  <div class="scale-card scale-good">
+    <div class="scale-label">Fast</div>
+    <div class="scale-value">n&#178;</div>
+    <div class="scale-desc">Manageable growth.</div>
+  </div>
+  <div class="scale-card scale-bad">
+    <div class="scale-label">Slow</div>
+    <div class="scale-value">2&#8319;</div>
+    <div class="scale-desc">Explosive growth.</div>
+  </div>
+</div>
+```
+
+##### Timelines
+
+Use for ordered steps, impact sequences, or hierarchies. Each item gets a dot on a vertical line.
+
+```html
+<div class="visual-timeline">
+  <div class="timeline-item">
+    <div class="timeline-label">Step 1</div>
+    <div class="timeline-title">Title Here</div>
+    <div class="timeline-desc">Description text.</div>
+  </div>
+  <!-- More timeline-item entries -->
+</div>
+```
+
+##### Inline Number Highlights
+
+Use for making specific numbers stand out within body text.
+
+```html
+<span class="num-highlight">10,000</span>
+```
+
+##### Figures with Captions
+
+Use `<figure>` and `<figcaption>` for images that need captions.
+
+```html
+<figure>
+  <img src="path/to/image.jpg" alt="Description">
+  <figcaption>Figure 1: Caption text here.</figcaption>
+</figure>
+```
+
+#### Visual Density Rule
+
+**Every post must include visual elements to avoid being text-heavy.** Follow this guideline:
+- Insert at least one visual element (callout, diagram, stat grid, equation block, comparison, etc.) every 2-3 paragraphs.
+- A post of 2000+ words should have at least 10 visual elements.
+- Use stat cards for numbers, callout boxes for tips/warnings, and diagrams for processes or relationships.
+- Never have more than 3 consecutive plain `<p>` tags without a visual break.
+
 #### Content Structure Pattern
 
 Follow this structure for consistency with existing posts:
@@ -148,11 +302,17 @@ Follow this structure for consistency with existing posts:
 <hr>
 <h2>First Major Section</h2>
 <p>Explanation and context.</p>
+<div class="callout-box callout-info">...</div>
+<p>More context.</p>
+<div class="diagram-container">...</div>
 <pre><code>// Code example with proper escaping
 function example() {\n  return true;\n}</code></pre>
 <p>Analysis of the code or concept.</p>
 <h2>Second Major Section</h2>
+<p>Content with <span class="num-highlight">key numbers</span> highlighted inline.</p>
+<div class="stat-grid">...</div>
 <p>Content continues...</p>
+<div class="scale-compare">...</div>
 ...
 <h2>Key Takeaways</h2>
 <ol>
@@ -224,3 +384,5 @@ To edit a post:
 - [ ] `date` is in `YYYY-MM-DD` format
 - [ ] `author` is `"Niaz Bin Siraj"`
 - [ ] `status` is `"published"`
+- [ ] Visual elements are used throughout (at least 1 every 2-3 paragraphs, minimum 10 for 2000+ word posts)
+- [ ] No more than 3 consecutive `<p>` tags without a visual break (callout, diagram, stat grid, etc.)
