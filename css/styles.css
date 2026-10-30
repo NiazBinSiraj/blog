@@ -1581,6 +1581,7 @@ a.hero-bio-chip:hover {
     flex-direction: column;
     gap: var(--space-md);
     padding-top: var(--space-md);
+    margin-bottom: var(--space-md);
 }
 
 @media (min-width: 1024px) {
@@ -1796,7 +1797,7 @@ a.hero-bio-chip:hover {
 }
 
 .post-content li::before {
-    content: '\2014';
+    content: '\2022';
     color: var(--primary);
     font-weight: 700;
     position: absolute;

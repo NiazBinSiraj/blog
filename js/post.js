@@ -186,12 +186,6 @@ class PostManager {
             '<a href="#" data-route="home">Home</a><span>/</span>' +
             '<span class="breadcrumb-current">' + (post.category || 'Post') + '</span>' +
             '</div>' +
-            '<div class="breadcrumb-metrics">' +
-            '<span class="metric"><span class="material-symbols-outlined">calendar_today</span> ' + dateDisplay + '</span>' +
-            '<span class="dot-sep">&bull;</span>' +
-            '<span class="metric"><span class="material-symbols-outlined">schedule</span> ' + post.readingTime + ' min read</span>' +
-            '<span class="dot-sep">&bull;</span>' +
-            '<span class="metric"><span class="material-symbols-outlined">notes</span> ' + wordCount.toLocaleString() + ' words</span>' +
             '</div>' +
             '</div>' +
             // Title
@@ -204,10 +198,16 @@ class PostManager {
             '<img src="static/images/profile.jpg" alt="' + post.author + '">' +
             '<div><div class="author-name-row">' +
             '<span class="author-name">' + post.author + '</span>' +
-            '<span class="author-role-badge">Software Engineer</span>' +
             '</div>' +
-            '<span class="author-subtitle">Software Engineering // System Design</span>' +
             '</div></div>' +
+            '</div>' +
+            // Post metrics
+            '<div class="breadcrumb-metrics">' +
+            '<span class="metric"><span class="material-symbols-outlined">calendar_today</span> ' + dateDisplay + '</span>' +
+            '<span class="dot-sep">&bull;</span>' +
+            '<span class="metric"><span class="material-symbols-outlined">schedule</span> ' + post.readingTime + ' min read</span>' +
+            '<span class="dot-sep">&bull;</span>' +
+            '<span class="metric"><span class="material-symbols-outlined">notes</span> ' + wordCount.toLocaleString() + ' words</span>' +
             '</div>' +
             '</header>' +
             coverImage +

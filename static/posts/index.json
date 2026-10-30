@@ -1,8 +1,12 @@
 {
   "posts": [
+    "immutable-dtos-java-records-modelmapper-spring-boot",
+    "enum-and-beanpropertyrowmapper-spring-quest",
     "openai-disproves-exponential-time-hypothesis",
     "dotai-spec-driven-development-8-phase-workflow",
     "why-meaningful-commits-matter-in-software-development",
-    "difflense-privacy-first-git-diff-viewer"
+    "difflense-privacy-first-git-diff-viewer",
+    "jquery-appendto-mistake-froze-web-page",
+    "angular-router-navigation-issues-serverless-photo-blog"
   ]
 }
