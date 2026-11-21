@@ -522,6 +522,26 @@ class Router {
             });
 
             // GA4: Track post view
+            // Render KaTeX math expressions in post content
+            var renderKaTeX = function() {
+                var el = document.querySelector('.post-content');
+                if (typeof renderMathInElement !== 'undefined' && el) {
+                    renderMathInElement(el, {
+                        delimiters: [
+                            {left: '$$', right: '$$', display: true},
+                            {left: '\\[', right: '\\]', display: true},
+                            {left: '\\(', right: '\\)', display: false}
+                        ],
+                        ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+                        throwOnError: false
+                    });
+                } else {
+                    setTimeout(renderKaTeX, 100);
+                }
+            };
+            renderKaTeX();
+
+            // GA4: Track post view
             if (typeof gaTrackEvent === 'function') {
                 gaTrackEvent('post_view', {
                     post_title: post.title,
